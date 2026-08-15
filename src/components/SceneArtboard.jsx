@@ -4,6 +4,7 @@ import SceneMenu from './SceneMenu'
 export default function SceneArtboard({
   backgroundSrc,
   bird,
+  cartela,
   house,
   onBackgroundLoad,
   overlayCharacters,
@@ -25,8 +26,6 @@ export default function SceneArtboard({
         className="absolute inset-0 h-full w-full object-fill"
       />
 
-      <div className="scene-status-tag">Web en desarrollo</div>
-
       <div className="absolute -right-[0.2%] top-0 z-[60]">
         <SceneMenu />
       </div>
@@ -44,6 +43,17 @@ export default function SceneArtboard({
           <SceneCharacter key={character.id} {...character} />
         ))}
       </div>
+
+      {cartela ? (
+        <div className="pointer-events-none absolute inset-0 z-[55] overflow-visible">
+          <img
+            src={cartela.src}
+            alt={cartela.alt}
+            className={cartela.className}
+            style={cartela.style}
+          />
+        </div>
+      ) : null}
 
       <div className="scene-overlay absolute inset-0">
         <div className="scene-inner absolute inset-0">

@@ -62,9 +62,40 @@ function setBubbleInitialState(bubbleRef) {
   })
 }
 
+function getRandomReversePause() {
+  return gsap.utils.random(5, 10, 0.1)
+}
+
+function createRandomPausedFrameTween({
+  frameDuration,
+  onUpdate,
+  state,
+  totalFrames,
+}) {
+  const maxFrame = totalFrames - 1
+  const frameEase = `steps(${maxFrame})`
+
+  return gsap
+    .timeline({ repeat: -1, repeatRefresh: true })
+    .to(state, {
+      frame: maxFrame,
+      duration: frameDuration,
+      ease: frameEase,
+      onUpdate,
+    })
+    .to({}, { duration: () => getRandomReversePause() })
+    .to(state, {
+      frame: 0,
+      duration: frameDuration,
+      ease: frameEase,
+      onUpdate,
+    })
+}
+
 const staticSceneAssets = [
   '/fondo.jpg',
   '/Casa.png',
+  '/cartela.svg',
   '/Frames/imoviles/personaje_escaleras/persona_1.png',
   '/Frames/imoviles/personajes_fiesta/Fiesta.png',
   '/Frames/imoviles/personaje_microfono/personaje.png',
@@ -136,6 +167,7 @@ export default function App() {
   const sofaRef = useRef(null)
   const sofaImageRef = useRef(null)
   const sofaTweenRef = useRef(null)
+  const sofaMoveTweenRef = useRef(null)
 
   const bibliotecarioRef = useRef(null)
   const bibliotecarioImageRef = useRef(null)
@@ -178,6 +210,22 @@ export default function App() {
   const columpioBubbleRef = useRef(null)
 
   const sceneStyle = useSceneSize(sceneShellRef, sceneRatio)
+
+  useEffect(() => {
+    if (!isAssetsReady) return
+
+    const shell = sceneShellRef.current
+    if (!shell) return
+
+    const centerSceneScroll = () => {
+      const maxScrollLeft = shell.scrollWidth - shell.clientWidth
+      shell.scrollLeft = Math.max(maxScrollLeft / 2, 0)
+    }
+
+    const frameId = window.requestAnimationFrame(centerSceneScroll)
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [isAssetsReady, sceneStyle.height, sceneStyle.width])
 
   const handleVanEnter = () => {
     vanFramesTweenRef.current?.pause()
@@ -473,16 +521,14 @@ export default function App() {
           delay: 0.25,
         })
 
-        gsap.to(grafitiState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(grafitiState.frame)
             grafitiImageRef.current.src = grafitiFrames[frameIndex]
           },
+          state: grafitiState,
+          totalFrames,
         })
       }
 
@@ -506,16 +552,14 @@ export default function App() {
 
         setBubbleInitialState(jardineroBubbleRef)
 
-        jardineroTweenRef.current = gsap.to(jardineroState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        jardineroTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(jardineroState.frame)
             jardineroImageRef.current.src = jardineroFrames[frameIndex]
           },
+          state: jardineroState,
+          totalFrames,
         })
       }
 
@@ -539,16 +583,14 @@ export default function App() {
 
         setBubbleInitialState(jardineraBubbleRef)
 
-        jardineraTweenRef.current = gsap.to(jardineraState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        jardineraTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(jardineraState.frame)
             jardineraImageRef.current.src = jardineraFrames[frameIndex]
           },
+          state: jardineraState,
+          totalFrames,
         })
       }
 
@@ -557,12 +599,6 @@ export default function App() {
         const totalFrames = arbolFrames.length
         const frameDuration = totalFrames / 2
 
-        gsap.set(arbolRef.current, {
-          xPercent: -50,
-          yPercent: -50,
-          willChange: 'transform',
-        })
-
         gsap.from(arbolRef.current, {
           opacity: 0,
           duration: 0.55,
@@ -570,16 +606,14 @@ export default function App() {
           delay: 0.22,
         })
 
-        arbolTweenRef.current = gsap.to(arbolState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        arbolTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(arbolState.frame)
             arbolImageRef.current.src = arbolFrames[frameIndex]
           },
+          state: arbolState,
+          totalFrames,
         })
       }
 
@@ -603,16 +637,14 @@ export default function App() {
 
         setBubbleInitialState(ordenadorBubbleRef)
 
-        ordenadorTweenRef.current = gsap.to(ordenadorState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        ordenadorTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(ordenadorState.frame)
             ordenadorImageRef.current.src = ordenadorFrames[frameIndex]
           },
+          state: ordenadorState,
+          totalFrames,
         })
       }
 
@@ -636,16 +668,14 @@ export default function App() {
 
         setBubbleInitialState(banquitoBubbleRef)
 
-        banquitoTweenRef.current = gsap.to(banquitoState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        banquitoTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(banquitoState.frame)
             banquitoImageRef.current.src = banquitoFrames[frameIndex]
           },
+          state: banquitoState,
+          totalFrames,
         })
       }
 
@@ -667,17 +697,29 @@ export default function App() {
           delay: 0.28,
         })
 
-        sofaTweenRef.current = gsap.to(sofaState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        sofaTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(sofaState.frame)
             sofaImageRef.current.src = sofaFrames[frameIndex]
           },
+          state: sofaState,
+          totalFrames,
         })
+
+        sofaMoveTweenRef.current = gsap
+          .timeline({ repeat: -1, repeatDelay: 1.4 })
+          .to(sofaRef.current, {
+            left: '44.2%',
+            duration: 2.2,
+            ease: 'power1.inOut',
+          })
+          .to({}, { duration: 3.3 })
+          .to(sofaRef.current, {
+            left: '42%',
+            duration: 2.1,
+            ease: 'power1.inOut',
+          })
       }
 
       if (bibliotecarioRef.current && bibliotecarioImageRef.current) {
@@ -698,17 +740,15 @@ export default function App() {
           delay: 0.3,
         })
 
-        bibliotecarioTweenRef.current = gsap.to(bibliotecarioState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        bibliotecarioTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(bibliotecarioState.frame)
             bibliotecarioImageRef.current.src =
               bibliotecarioFrames[frameIndex]
           },
+          state: bibliotecarioState,
+          totalFrames,
         })
       }
 
@@ -730,16 +770,14 @@ export default function App() {
           delay: 0.32,
         })
 
-        cuadroTweenRef.current = gsap.to(cuadroState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        cuadroTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(cuadroState.frame)
             cuadroImageRef.current.src = cuadroFrames[frameIndex]
           },
+          state: cuadroState,
+          totalFrames,
         })
       }
 
@@ -763,16 +801,14 @@ export default function App() {
 
         setBubbleInitialState(telefonoBubbleRef)
 
-        telefonoTweenRef.current = gsap.to(telefonoState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        telefonoTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(telefonoState.frame)
             telefonoImageRef.current.src = telefonoFrames[frameIndex]
           },
+          state: telefonoState,
+          totalFrames,
         })
 
         telefonoMoveTweenRef.current = gsap.to(telefonoRef.current, {
@@ -804,16 +840,14 @@ export default function App() {
           delay: 0.36,
         })
 
-        parejaTweenRef.current = gsap.to(parejaState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        parejaTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(parejaState.frame)
             parejaImageRef.current.src = parejaFrames[frameIndex]
           },
+          state: parejaState,
+          totalFrames,
         })
       }
 
@@ -835,17 +869,15 @@ export default function App() {
           delay: 0.38,
         })
 
-        personasSillasTweenRef.current = gsap.to(personasSillasState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        personasSillasTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(personasSillasState.frame)
             personasSillasImageRef.current.src =
               personasSillasFrames[frameIndex]
           },
+          state: personasSillasState,
+          totalFrames,
         })
       }
 
@@ -867,16 +899,14 @@ export default function App() {
           delay: 0.4,
         })
 
-        lectorTweenRef.current = gsap.to(lectorState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        lectorTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(lectorState.frame)
             lectorImageRef.current.src = lectorFrames[frameIndex]
           },
+          state: lectorState,
+          totalFrames,
         })
       }
 
@@ -930,17 +960,15 @@ export default function App() {
 
         setBubbleInitialState(hombreSentadoBubbleRef)
 
-        hombreSentadoTweenRef.current = gsap.to(hombreSentadoState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        hombreSentadoTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(hombreSentadoState.frame)
             hombreSentadoImageRef.current.src =
               hombreSentadoFrames[frameIndex]
           },
+          state: hombreSentadoState,
+          totalFrames,
         })
       }
 
@@ -964,17 +992,15 @@ export default function App() {
 
         setBubbleInitialState(mujerSentadaBubbleRef)
 
-        mujerSentadaTweenRef.current = gsap.to(mujerSentadaState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        mujerSentadaTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(mujerSentadaState.frame)
             mujerSentadaImageRef.current.src =
               mujerSentadaFrames[frameIndex]
           },
+          state: mujerSentadaState,
+          totalFrames,
         })
       }
 
@@ -998,23 +1024,21 @@ export default function App() {
 
         setBubbleInitialState(profeBubbleRef)
 
-        profeTweenRef.current = gsap.to(profeState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        profeTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(profeState.frame)
             profeImageRef.current.src = profeFrames[frameIndex]
           },
+          state: profeState,
+          totalFrames,
         })
       }
 
       if (columpioRef.current && columpioImageRef.current) {
         const columpioState = { frame: 0 }
         const totalFrames = columpioFrames.length
-        const frameDuration = totalFrames / 5
+        const frameDuration = totalFrames / 4
 
         gsap.set(columpioRef.current, {
           xPercent: -50,
@@ -1031,16 +1055,14 @@ export default function App() {
 
         setBubbleInitialState(columpioBubbleRef)
 
-        columpioTweenRef.current = gsap.to(columpioState, {
-          frame: totalFrames - 1,
-          duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
-          repeat: -1,
-          yoyo: true,
+        columpioTweenRef.current = createRandomPausedFrameTween({
+          frameDuration,
           onUpdate: () => {
             const frameIndex = Math.round(columpioState.frame)
             columpioImageRef.current.src = columpioFrames[frameIndex]
           },
+          state: columpioState,
+          totalFrames,
         })
       }
     }, rootRef)
@@ -1054,6 +1076,7 @@ export default function App() {
       ordenadorTweenRef.current = null
       banquitoTweenRef.current = null
       sofaTweenRef.current = null
+      sofaMoveTweenRef.current = null
       bibliotecarioTweenRef.current = null
       cuadroTweenRef.current = null
       telefonoTweenRef.current = null
@@ -1086,7 +1109,7 @@ export default function App() {
       onPointerLeave: handleBanquitoLeave,
       src: banquitoFrames[0],
       alt: 'Banquito animado',
-      style: { left: '63%', top: '52.5%', width: '6.6%' },
+      style: { left: '63%', top: '52.8%', width: '6.6%' },
     },
     {
       id: 'ordenador',
@@ -1101,7 +1124,7 @@ export default function App() {
       onPointerLeave: handleOrdenadorLeave,
       src: ordenadorFrames[0],
       alt: 'Ordenador animado',
-      style: { left: '57%', top: '52.5%', width: '6.5%' },
+      style: { left: '57%', top: '52.9%', width: '6.5%' },
     },
     {
       id: 'arbol',
@@ -1111,7 +1134,12 @@ export default function App() {
       imageRef: arbolImageRef,
       src: arbolFrames[0],
       alt: 'Arbol animado',
-      style: { left: '89%', top: '67%', width: '24%' },
+      style: {
+        left: '89%',
+        top: '67%',
+        width: '24%',
+        transform: 'translate(-50%, -50%)',
+      },
     },
     {
       id: 'grafiti',
@@ -1121,7 +1149,7 @@ export default function App() {
       imageRef: grafitiImageRef,
       src: grafitiFrames[0],
       alt: 'Grafiti animado',
-      style: { left: '44%', top: '16.9%', width: '5.8%' },
+      style: { left: '44%', top: '17.1%', width: '5.8%' },
     },
     {
       id: 'bibliotecario',
@@ -1141,7 +1169,7 @@ export default function App() {
       imageRef: cuadroImageRef,
       src: cuadroFrames[0],
       alt: 'Cuadro animado',
-      style: { left: '48%', top: '44%', width: '10%' },
+      style: { left: '48%', top: '44.3%', width: '10%' },
     },
     {
       id: 'sofa',
@@ -1151,7 +1179,7 @@ export default function App() {
       imageRef: sofaImageRef,
       src: sofaFrames[0],
       alt: 'Sofa animado',
-      style: { left: '42%', top: '56.1%', width: '10%' },
+      style: { left: '42%', top: '56.4%', width: '10%' },
     },
     {
       id: 'jardinero',
@@ -1252,7 +1280,7 @@ export default function App() {
       imageClassName: 'personaje-microfono-frame',
       src: '/Frames/imoviles/personaje_microfono/personaje.png',
       alt: 'Personaje con microfono',
-      style: { left: '54.4%', top: '59.8%', width: '5.5%' },
+      style: { left: '54.4%', top: '60.2%', width: '5.5%' },
     },
     {
       id: 'tablero',
@@ -1280,7 +1308,7 @@ export default function App() {
       imageRef: personasSillasImageRef,
       src: personasSillasFrames[0],
       alt: 'Personas en sillas animadas',
-      style: { left: '56%', top: '70.2%', width: '6%' },
+      style: { left: '56%', top: '70.1%', width: '6%' },
     },
     {
       id: 'lector',
@@ -1290,7 +1318,7 @@ export default function App() {
       imageRef: lectorImageRef,
       src: lectorFrames[0],
       alt: 'Lector animado',
-      style: { left: '46%', top: '66%', width: '5.2%' },
+      style: { left: '51.8%', top: '67.4%', width: '3.6%' },
     },
     {
       id: 'hombre-sentado',
@@ -1350,7 +1378,7 @@ export default function App() {
       onPointerLeave: handleColumpioLeave,
       src: columpioFrames[0],
       alt: 'Columpio animado',
-      style: { left: '70%', top: '52.2%', width: '19.8%' },
+      style: { left: '69%', top: '55%', width: '22%' },
     },
   ]
 
@@ -1386,9 +1414,18 @@ export default function App() {
     className: 'absolute left-1/2 top-1/2 w-full object-contain',
     style: {
       left: '50%',
-      top: '57.4%',
+      top: '61.2%',
       width: '100%',
       transform: 'translate(-50%, -50%) scale(1.17)',
+    },
+  }
+
+  const cartelaLayer = {
+    src: '/cartela.svg',
+    alt: 'Cartela',
+    className: 'cartela-layer absolute bottom-0 right-0 object-contain',
+    style: {
+      width: '18%',
     },
   }
 
@@ -1399,17 +1436,20 @@ export default function App() {
     >
       {isAssetsReady ? (
         <section ref={sceneShellRef} className="scene-shell">
-          <SceneArtboard
-            backgroundSrc="/fondo.jpg"
-            bird={birdCharacter}
-            house={houseLayer}
-            onBackgroundLoad={handleBackgroundLoad}
-            overlayCharacters={overlayCharacters}
-            sceneStyle={sceneStyle}
-            superTopCharacters={superTopCharacters}
-            topCharacters={topCharacters}
-            van={vanCharacter}
-          />
+          <div className="scene-shell-content">
+            <SceneArtboard
+              backgroundSrc="/fondo.jpg"
+              bird={birdCharacter}
+              cartela={cartelaLayer}
+              house={houseLayer}
+              onBackgroundLoad={handleBackgroundLoad}
+              overlayCharacters={overlayCharacters}
+              sceneStyle={sceneStyle}
+              superTopCharacters={superTopCharacters}
+              topCharacters={topCharacters}
+              van={vanCharacter}
+            />
+          </div>
         </section>
       ) : (
         <div className="scene-loader" aria-live="polite">
@@ -1424,7 +1464,6 @@ export default function App() {
                 style={{ width: `${loadingProgress}%` }}
               ></div>
             </div>
-            <p className="scene-loader-text">Web en desarrollo</p>
           </div>
         </div>
       )}
