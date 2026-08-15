@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import ContactPage from './components/ContactPage'
 import ProjectsPage from './components/ProjectsPage'
 import SceneArtboard from './components/SceneArtboard'
+import ShopPage from './components/ShopPage'
+import TelefonicaProjectPage from './components/TelefonicaProjectPage'
+import StudioPage from './components/StudioPage'
 import {
   arbolFrames,
   banquitoFrames,
@@ -133,7 +137,7 @@ export default function App() {
   const [sceneRatio, setSceneRatio] = useState(2048 / 1152)
   const [isAssetsReady, setIsAssetsReady] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
-  const [isProjectsOpen, setIsProjectsOpen] = useState(false)
+  const [activePage, setActivePage] = useState('home')
   const rootRef = useRef(null)
   const sceneShellRef = useRef(null)
 
@@ -221,11 +225,11 @@ export default function App() {
   const sceneStyle = useSceneSize(sceneShellRef, sceneRatio)
 
   const handleNavigate = (nextSection) => {
-    setIsProjectsOpen(nextSection === 'projects')
+    setActivePage(nextSection ?? 'home')
   }
 
   useEffect(() => {
-    if (!isAssetsReady || isProjectsOpen) return
+    if (!isAssetsReady || activePage !== 'home') return
 
     const shell = sceneShellRef.current
     if (!shell) return
@@ -238,7 +242,7 @@ export default function App() {
     const frameId = window.requestAnimationFrame(centerSceneScroll)
 
     return () => window.cancelAnimationFrame(frameId)
-  }, [isAssetsReady, isProjectsOpen, sceneStyle.height, sceneStyle.width])
+  }, [activePage, isAssetsReady, sceneStyle.height, sceneStyle.width])
 
   const handleVanEnter = () => {
     vanFramesTweenRef.current?.pause()
@@ -416,7 +420,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!isAssetsReady || isProjectsOpen) return
+    if (!isAssetsReady || activePage !== 'home') return
 
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
@@ -1096,7 +1100,7 @@ export default function App() {
       columpioTweenRef.current = null
       ctx.revert()
     }
-  }, [isAssetsReady, isProjectsOpen])
+  }, [activePage, isAssetsReady])
 
   const bubbleInteriorText = 'Dise\u00f1o de interiores'
 
@@ -1438,13 +1442,45 @@ export default function App() {
     <main
       ref={rootRef}
       className={
-        !isProjectsOpen
+        activePage === 'home'
           ? 'flex h-screen items-center justify-center overflow-hidden bg-white p-8'
-          : 'min-h-screen bg-[#f7f4ee] px-8 py-6 text-stone-950'
+          : 'min-h-screen bg-white px-8 py-6 text-stone-950'
       }
     >
-      {isAssetsReady && isProjectsOpen ? (
-        <ProjectsPage onBack={() => setIsProjectsOpen(false)} />
+      {isAssetsReady && activePage === 'projects' ? (
+        <ProjectsPage
+          activePage={activePage}
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+          onOpenProject={(projectId) => {
+            if (projectId === 'telefonica') {
+              setActivePage('project-telefonica')
+            }
+          }}
+        />
+      ) : isAssetsReady && activePage === 'project-telefonica' ? (
+        <TelefonicaProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'studio' ? (
+        <StudioPage
+          activePage={activePage}
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'contact' ? (
+        <ContactPage
+          activePage={activePage}
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'shop' ? (
+        <ShopPage
+          activePage={activePage}
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
       ) : isAssetsReady ? (
         <section ref={sceneShellRef} className="scene-shell">
           <div className="scene-shell-content">

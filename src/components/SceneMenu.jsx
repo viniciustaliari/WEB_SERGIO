@@ -8,13 +8,13 @@ const primaryItems = [
   { label: '5. DIRECCION DE ARTE' },
   { label: '6. ACADEMIA' },
   { label: 'PROYECTOS', pageId: 'projects' },
-  { label: 'TIENDA ONLINE' },
+  { label: 'TIENDA ONLINE', pageId: 'shop' },
 ]
 
 const secondaryItems = [
   { label: 'PROYECTOS', pageId: 'projects' },
-  { label: 'CONTACTO' },
-  { label: 'ESTUDIO' },
+  { label: 'CONTACTO', pageId: 'contact' },
+  { label: 'ESTUDIO', pageId: 'studio' },
 ]
 
 export default function SceneMenu({ onNavigate }) {

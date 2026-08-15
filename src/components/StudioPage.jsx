@@ -1,0 +1,62 @@
+import { useState } from 'react'
+import PageFooter from './PageFooter'
+import PageHeader from './PageHeader'
+
+const studioGroups = [
+  [
+    'Todo empez\u00f3 aqu\u00ed, en un piso de la calle Camarena 228, donde un padre le ense\u00f1\u00f3 a su hijo todo lo que sab\u00eda. Desde muy peque\u00f1o aprendi\u00f3 que para todo hab\u00eda una soluci\u00f3n, y que si no exist\u00eda era simplemente porque nadie hab\u00eda sido lo bastante valiente o creativo como para inventarla.',
+  ],
+  [
+    'Le ense\u00f1aron a pensar distinto, a buscar soluciones radicales donde otros solo ve\u00edan algo imposible y a disfrutar del proceso. Aquel ni\u00f1o se pasaba horas ayudando a su padre y a su abuelo a construir cualquier cosa, aprendiendo con las manos y aprovechando su tama\u00f1o para colarse donde ellos no cab\u00edan. Fue as\u00ed como decidi\u00f3 que de mayor ser\u00eda "arquitect\u00f3logo", como \u00e9l lo llamaba.',
+  ],
+  [
+    'Con el tiempo se enamoraron del dise\u00f1o, y padre e hijo acabaron estudiando Arquitectura de Interiores en la ETSAM. Fue, sin duda, una de las mejores decisiones de sus vidas: se abri\u00f3 ante ellos un mundo completamente nuevo.',
+  ],
+  [
+    'Puede que no fueran los mejores, pero destacaban. Donde otros ve\u00edan problemas, ellos ve\u00edan posibilidades. Cada proyecto era un reto, casi un juego: una nueva oportunidad de resolver algo de forma rebelde, creativa y \u00fatil.',
+  ],
+  [
+    'Con el tiempo, todo ese camino compartido los llev\u00f3 a fundar un estudio juntos. Dos miradas distintas que, lejos de chocar, se complementan a la perfecci\u00f3n y encuentran, en esa uni\u00f3n, soluciones \u00fanicas.',
+  ],
+]
+
+export default function StudioPage({ activePage, onBack, onNavigate }) {
+  const [isSpanish, setIsSpanish] = useState(false)
+
+  return (
+    <section className="projects-page studio-page">
+      <PageHeader
+        activePage={activePage}
+        isSpanish={isSpanish}
+        onBack={onBack}
+        onNavigate={onNavigate}
+        onSetSpanish={setIsSpanish}
+      />
+
+      <div className="contact-page-content studio-page-content">
+        <img
+          className="contact-page-image studio-page-image"
+          src="/pages/estudio.png"
+          alt=""
+          aria-hidden="true"
+        />
+
+        <div className="contact-page-copy studio-page-copy">
+          <h1>Estudio 2 28</h1>
+
+          <div className="contact-page-groups studio-page-groups">
+            {studioGroups.map((group, index) => (
+              <div key={index} className="contact-page-group studio-page-group">
+                {group.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <PageFooter />
+    </section>
+  )
+}
