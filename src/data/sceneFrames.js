@@ -24,7 +24,7 @@ export const jardineraFrames = Array.from(
 )
 
 export const arbolFrames = Array.from(
-  { length: 10 },
+  { length: 25 },
   (_, index) => `/Frames/arbol/${index + 1}.png`,
 )
 
@@ -86,6 +86,11 @@ export const profeFrames = Array.from(
 export const hombreSentadoFrames = Array.from(
   { length: 9 },
   (_, index) => `/Frames/hombre_sentado/${index + 1}.png`,
+)
+
+export const humoFrames = Array.from(
+  { length: 26 },
+  (_, index) => `/Frames/humo/${index + 1}.png`,
 )
 
 export const mujerSentadaFrames = Array.from(

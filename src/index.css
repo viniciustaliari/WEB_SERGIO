@@ -561,6 +561,51 @@ a {
   object-position: center;
 }
 
+.maleta-anchor {
+  position: absolute;
+  aspect-ratio: 188 / 549;
+}
+
+.maleta-frame {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+
+.fumador-anchor {
+  position: absolute;
+  aspect-ratio: 230 / 627;
+}
+
+.fumador-frame {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+
+.humo-anchor {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+}
+
+.humo-frame {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+
 .arbol-anchor {
   position: absolute;
   aspect-ratio: 1 / 1;

@@ -10,6 +10,7 @@ import {
   cuadroFrames,
   grafitiFrames,
   hombreSentadoFrames,
+  humoFrames,
   jardineraFrames,
   jardineroFrames,
   lectorFrames,
@@ -156,6 +157,9 @@ export default function App() {
   const lectorRef = useRef(null)
   const lectorImageRef = useRef(null)
   const lectorTweenRef = useRef(null)
+  const humoRef = useRef(null)
+  const humoImageRef = useRef(null)
+  const humoTweenRef = useRef(null)
   const hombreSentadoRef = useRef(null)
   const hombreSentadoImageRef = useRef(null)
   const hombreSentadoTweenRef = useRef(null)
@@ -876,6 +880,36 @@ export default function App() {
         })
       }
 
+      if (humoRef.current && humoImageRef.current) {
+        const humoState = { frame: 0 }
+        const totalFrames = humoFrames.length
+        const frameDuration = totalFrames / 4
+
+        gsap.set(humoRef.current, {
+          xPercent: -50,
+          yPercent: -50,
+          willChange: 'transform',
+        })
+
+        gsap.from(humoRef.current, {
+          opacity: 0,
+          duration: 0.55,
+          ease: 'power2.out',
+          delay: 0.403,
+        })
+
+        humoTweenRef.current = gsap.to(humoState, {
+          frame: totalFrames - 1,
+          duration: frameDuration,
+          ease: `steps(${totalFrames - 1})`,
+          repeat: -1,
+          onUpdate: () => {
+            const frameIndex = Math.round(humoState.frame)
+            humoImageRef.current.src = humoFrames[frameIndex]
+          },
+        })
+      }
+
       if (hombreSentadoRef.current && hombreSentadoImageRef.current) {
         const hombreSentadoState = { frame: 0 }
         const totalFrames = hombreSentadoFrames.length
@@ -1027,6 +1061,7 @@ export default function App() {
       parejaTweenRef.current = null
       personasSillasTweenRef.current = null
       lectorTweenRef.current = null
+      humoTweenRef.current = null
       hombreSentadoTweenRef.current = null
       mujerSentadaTweenRef.current = null
       profeTweenRef.current = null
@@ -1168,6 +1203,22 @@ export default function App() {
       style: { left: '29%', top: '64.5%', width: '7%' },
     },
     {
+      id: 'maleta',
+      anchorClassName: 'maleta-anchor',
+      imageClassName: 'maleta-frame',
+      src: '/Frames/imoviles/maleta/maleta.png',
+      alt: 'Maleta',
+      style: { left: '25.5%', top: '73.5%', width: '3.1%' },
+    },
+    {
+      id: 'fumador',
+      anchorClassName: 'fumador-anchor',
+      imageClassName: 'fumador-frame',
+      src: '/Frames/imoviles/fumador/fumador.png',
+      alt: 'Fumador',
+      style: { left: '29%', top: '28.5%', width: '4%' },
+    },
+    {
       id: 'telefono',
       ref: telefonoRef,
       anchorClassName: 'telefono-anchor',
@@ -1210,6 +1261,16 @@ export default function App() {
       src: '/Frames/imoviles/tablero/tablero.png',
       alt: 'Tablero',
       style: { left: '33.4%', top: '72.2%', width: '4.8%', zIndex: 120 },
+    },
+    {
+      id: 'humo',
+      ref: humoRef,
+      anchorClassName: 'humo-anchor',
+      imageClassName: 'humo-frame',
+      imageRef: humoImageRef,
+      src: humoFrames[0],
+      alt: 'Humo animado',
+      style: { left: '35%', top: '27%', width: '3%' },
     },
     {
       id: 'personas-sillas',
