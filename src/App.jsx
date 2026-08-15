@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import ProjectsPage from './components/ProjectsPage'
 import SceneArtboard from './components/SceneArtboard'
 import {
   arbolFrames,
@@ -60,6 +61,13 @@ function setBubbleInitialState(bubbleRef) {
     scale: 0.92,
     transformOrigin: '20% 100%',
   })
+}
+
+function setAnimatedFrame(imageRef, frames, frame) {
+  if (!imageRef.current) return
+
+  const frameIndex = Math.max(0, Math.min(frames.length - 1, Math.round(frame)))
+  imageRef.current.src = frames[frameIndex]
 }
 
 function getRandomReversePause() {
@@ -125,6 +133,7 @@ export default function App() {
   const [sceneRatio, setSceneRatio] = useState(2048 / 1152)
   const [isAssetsReady, setIsAssetsReady] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
+  const [isProjectsOpen, setIsProjectsOpen] = useState(false)
   const rootRef = useRef(null)
   const sceneShellRef = useRef(null)
 
@@ -211,8 +220,12 @@ export default function App() {
 
   const sceneStyle = useSceneSize(sceneShellRef, sceneRatio)
 
+  const handleNavigate = (nextSection) => {
+    setIsProjectsOpen(nextSection === 'projects')
+  }
+
   useEffect(() => {
-    if (!isAssetsReady) return
+    if (!isAssetsReady || isProjectsOpen) return
 
     const shell = sceneShellRef.current
     if (!shell) return
@@ -225,7 +238,7 @@ export default function App() {
     const frameId = window.requestAnimationFrame(centerSceneScroll)
 
     return () => window.cancelAnimationFrame(frameId)
-  }, [isAssetsReady, sceneStyle.height, sceneStyle.width])
+  }, [isAssetsReady, isProjectsOpen, sceneStyle.height, sceneStyle.width])
 
   const handleVanEnter = () => {
     vanFramesTweenRef.current?.pause()
@@ -403,7 +416,7 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    if (!isAssetsReady) return
+    if (!isAssetsReady || isProjectsOpen) return
 
     const ctx = gsap.context(() => {
       const timeline = gsap.timeline({
@@ -440,8 +453,7 @@ export default function App() {
           ease: `steps(${totalFrames - 1})`,
           repeat: -1,
           onUpdate: () => {
-            const frameIndex = Math.round(birdState.frame)
-            birdImageRef.current.src = birdFrames[frameIndex]
+            setAnimatedFrame(birdImageRef, birdFrames, birdState.frame)
           },
         })
 
@@ -481,8 +493,7 @@ export default function App() {
           ease: `steps(${totalFrames - 1})`,
           repeat: -1,
           onUpdate: () => {
-            const frameIndex = Math.round(vanState.frame)
-            vanImageRef.current.src = vanFrames[frameIndex]
+            setAnimatedFrame(vanImageRef, vanFrames, vanState.frame)
           },
         })
 
@@ -524,8 +535,7 @@ export default function App() {
         createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(grafitiState.frame)
-            grafitiImageRef.current.src = grafitiFrames[frameIndex]
+            setAnimatedFrame(grafitiImageRef, grafitiFrames, grafitiState.frame)
           },
           state: grafitiState,
           totalFrames,
@@ -555,8 +565,7 @@ export default function App() {
         jardineroTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(jardineroState.frame)
-            jardineroImageRef.current.src = jardineroFrames[frameIndex]
+            setAnimatedFrame(jardineroImageRef, jardineroFrames, jardineroState.frame)
           },
           state: jardineroState,
           totalFrames,
@@ -586,8 +595,7 @@ export default function App() {
         jardineraTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(jardineraState.frame)
-            jardineraImageRef.current.src = jardineraFrames[frameIndex]
+            setAnimatedFrame(jardineraImageRef, jardineraFrames, jardineraState.frame)
           },
           state: jardineraState,
           totalFrames,
@@ -609,8 +617,7 @@ export default function App() {
         arbolTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(arbolState.frame)
-            arbolImageRef.current.src = arbolFrames[frameIndex]
+            setAnimatedFrame(arbolImageRef, arbolFrames, arbolState.frame)
           },
           state: arbolState,
           totalFrames,
@@ -640,8 +647,7 @@ export default function App() {
         ordenadorTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(ordenadorState.frame)
-            ordenadorImageRef.current.src = ordenadorFrames[frameIndex]
+            setAnimatedFrame(ordenadorImageRef, ordenadorFrames, ordenadorState.frame)
           },
           state: ordenadorState,
           totalFrames,
@@ -671,8 +677,7 @@ export default function App() {
         banquitoTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(banquitoState.frame)
-            banquitoImageRef.current.src = banquitoFrames[frameIndex]
+            setAnimatedFrame(banquitoImageRef, banquitoFrames, banquitoState.frame)
           },
           state: banquitoState,
           totalFrames,
@@ -700,8 +705,7 @@ export default function App() {
         sofaTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(sofaState.frame)
-            sofaImageRef.current.src = sofaFrames[frameIndex]
+            setAnimatedFrame(sofaImageRef, sofaFrames, sofaState.frame)
           },
           state: sofaState,
           totalFrames,
@@ -743,9 +747,11 @@ export default function App() {
         bibliotecarioTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(bibliotecarioState.frame)
-            bibliotecarioImageRef.current.src =
-              bibliotecarioFrames[frameIndex]
+            setAnimatedFrame(
+              bibliotecarioImageRef,
+              bibliotecarioFrames,
+              bibliotecarioState.frame,
+            )
           },
           state: bibliotecarioState,
           totalFrames,
@@ -773,8 +779,7 @@ export default function App() {
         cuadroTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(cuadroState.frame)
-            cuadroImageRef.current.src = cuadroFrames[frameIndex]
+            setAnimatedFrame(cuadroImageRef, cuadroFrames, cuadroState.frame)
           },
           state: cuadroState,
           totalFrames,
@@ -804,8 +809,7 @@ export default function App() {
         telefonoTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(telefonoState.frame)
-            telefonoImageRef.current.src = telefonoFrames[frameIndex]
+            setAnimatedFrame(telefonoImageRef, telefonoFrames, telefonoState.frame)
           },
           state: telefonoState,
           totalFrames,
@@ -843,8 +847,7 @@ export default function App() {
         parejaTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(parejaState.frame)
-            parejaImageRef.current.src = parejaFrames[frameIndex]
+            setAnimatedFrame(parejaImageRef, parejaFrames, parejaState.frame)
           },
           state: parejaState,
           totalFrames,
@@ -872,9 +875,11 @@ export default function App() {
         personasSillasTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(personasSillasState.frame)
-            personasSillasImageRef.current.src =
-              personasSillasFrames[frameIndex]
+            setAnimatedFrame(
+              personasSillasImageRef,
+              personasSillasFrames,
+              personasSillasState.frame,
+            )
           },
           state: personasSillasState,
           totalFrames,
@@ -902,8 +907,7 @@ export default function App() {
         lectorTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(lectorState.frame)
-            lectorImageRef.current.src = lectorFrames[frameIndex]
+            setAnimatedFrame(lectorImageRef, lectorFrames, lectorState.frame)
           },
           state: lectorState,
           totalFrames,
@@ -934,8 +938,7 @@ export default function App() {
           ease: `steps(${totalFrames - 1})`,
           repeat: -1,
           onUpdate: () => {
-            const frameIndex = Math.round(humoState.frame)
-            humoImageRef.current.src = humoFrames[frameIndex]
+            setAnimatedFrame(humoImageRef, humoFrames, humoState.frame)
           },
         })
       }
@@ -963,9 +966,11 @@ export default function App() {
         hombreSentadoTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(hombreSentadoState.frame)
-            hombreSentadoImageRef.current.src =
-              hombreSentadoFrames[frameIndex]
+            setAnimatedFrame(
+              hombreSentadoImageRef,
+              hombreSentadoFrames,
+              hombreSentadoState.frame,
+            )
           },
           state: hombreSentadoState,
           totalFrames,
@@ -995,9 +1000,11 @@ export default function App() {
         mujerSentadaTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(mujerSentadaState.frame)
-            mujerSentadaImageRef.current.src =
-              mujerSentadaFrames[frameIndex]
+            setAnimatedFrame(
+              mujerSentadaImageRef,
+              mujerSentadaFrames,
+              mujerSentadaState.frame,
+            )
           },
           state: mujerSentadaState,
           totalFrames,
@@ -1027,8 +1034,7 @@ export default function App() {
         profeTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(profeState.frame)
-            profeImageRef.current.src = profeFrames[frameIndex]
+            setAnimatedFrame(profeImageRef, profeFrames, profeState.frame)
           },
           state: profeState,
           totalFrames,
@@ -1058,8 +1064,7 @@ export default function App() {
         columpioTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
-            const frameIndex = Math.round(columpioState.frame)
-            columpioImageRef.current.src = columpioFrames[frameIndex]
+            setAnimatedFrame(columpioImageRef, columpioFrames, columpioState.frame)
           },
           state: columpioState,
           totalFrames,
@@ -1091,7 +1096,7 @@ export default function App() {
       columpioTweenRef.current = null
       ctx.revert()
     }
-  }, [isAssetsReady])
+  }, [isAssetsReady, isProjectsOpen])
 
   const bubbleInteriorText = 'Dise\u00f1o de interiores'
 
@@ -1432,9 +1437,15 @@ export default function App() {
   return (
     <main
       ref={rootRef}
-      className="flex h-screen items-center justify-center overflow-hidden bg-white p-8"
+      className={
+        !isProjectsOpen
+          ? 'flex h-screen items-center justify-center overflow-hidden bg-white p-8'
+          : 'min-h-screen bg-[#f7f4ee] px-8 py-6 text-stone-950'
+      }
     >
-      {isAssetsReady ? (
+      {isAssetsReady && isProjectsOpen ? (
+        <ProjectsPage onBack={() => setIsProjectsOpen(false)} />
+      ) : isAssetsReady ? (
         <section ref={sceneShellRef} className="scene-shell">
           <div className="scene-shell-content">
             <SceneArtboard
@@ -1442,6 +1453,7 @@ export default function App() {
               bird={birdCharacter}
               cartela={cartelaLayer}
               house={houseLayer}
+              onNavigate={handleNavigate}
               onBackgroundLoad={handleBackgroundLoad}
               overlayCharacters={overlayCharacters}
               sceneStyle={sceneStyle}

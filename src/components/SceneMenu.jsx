@@ -1,18 +1,23 @@
 import { useState } from 'react'
 
 const primaryItems = [
-  '1. DISENO DE INTERIORES',
-  '2. PAISAJISMO',
-  '3. ESCENOGRAFIA',
-  '4. DISENO GRAFICO',
-  '5. DIRECCION DE ARTE',
-  '6. ACADEMIA',
-  'TIENDA ONLINE',
+  { label: '1. DISENO DE INTERIORES' },
+  { label: '2. PAISAJISMO' },
+  { label: '3. ESCENOGRAFIA' },
+  { label: '4. DISENO GRAFICO' },
+  { label: '5. DIRECCION DE ARTE' },
+  { label: '6. ACADEMIA' },
+  { label: 'PROYECTOS', pageId: 'projects' },
+  { label: 'TIENDA ONLINE' },
 ]
 
-const secondaryItems = ['CONTACTO', 'ESTUDIO']
+const secondaryItems = [
+  { label: 'PROYECTOS', pageId: 'projects' },
+  { label: 'CONTACTO' },
+  { label: 'ESTUDIO' },
+]
 
-export default function SceneMenu() {
+export default function SceneMenu({ onNavigate }) {
   const [isOpen, setIsOpen] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [isSpanish, setIsSpanish] = useState(false)
@@ -45,16 +50,36 @@ export default function SceneMenu() {
 
           <div className="scene-menu-group scene-menu-group-primary">
             {primaryItems.map((item) => (
-              <button key={item} type="button" className="scene-menu-item">
-                <span>{item}</span>
+              <button
+                key={item.label}
+                type="button"
+                className="scene-menu-item"
+                onClick={() => {
+                  if (item.pageId) {
+                    onNavigate?.(item.pageId)
+                    setIsOpen(false)
+                  }
+                }}
+              >
+                <span>{item.label}</span>
               </button>
             ))}
           </div>
 
           <div className="scene-menu-group scene-menu-group-secondary">
             {secondaryItems.map((item) => (
-              <button key={item} type="button" className="scene-menu-item">
-                <span>{item}</span>
+              <button
+                key={item.label}
+                type="button"
+                className="scene-menu-item"
+                onClick={() => {
+                  if (item.pageId) {
+                    onNavigate?.(item.pageId)
+                    setIsOpen(false)
+                  }
+                }}
+              >
+                <span>{item.label}</span>
               </button>
             ))}
 

@@ -6,6 +6,7 @@ export default function SceneArtboard({
   bird,
   cartela,
   house,
+  onNavigate,
   onBackgroundLoad,
   overlayCharacters,
   superTopCharacters = [],
@@ -27,7 +28,7 @@ export default function SceneArtboard({
       />
 
       <div className="absolute -right-[0.2%] top-0 z-[60]">
-        <SceneMenu />
+        <SceneMenu onNavigate={onNavigate} />
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
