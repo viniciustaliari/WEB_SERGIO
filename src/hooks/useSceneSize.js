@@ -10,7 +10,7 @@ export function useSceneSize(sceneShellRef, sceneRatio) {
 
       const shellHeight = shell.clientHeight
       const safetyInset = 24
-      const targetHeight = Math.max((shellHeight - safetyInset) * 0.97, 0)
+      const targetHeight = Math.max((shellHeight - safetyInset) * 1.02, 0)
       const roundedHeight = Math.round(targetHeight)
       const roundedWidth = Math.round(
         Math.max(800, roundedHeight * sceneRatio, 0),
