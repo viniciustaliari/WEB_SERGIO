@@ -688,47 +688,58 @@ export default function App() {
         })
       }
 
-      if (sofaRef.current && sofaImageRef.current) {
-        const sofaState = { frame: 0 }
-        const totalFrames = sofaFrames.length
-        const frameDuration = totalFrames / 3
+        if (sofaRef.current && sofaImageRef.current) {
+          const sofaState = { frame: 0 }
+          const totalFrames = sofaFrames.length
+          const frameDuration = totalFrames / 3
+          const maxFrame = totalFrames - 1
+          const sofaPauseDuration = () => getRandomReversePause()
 
-        gsap.set(sofaRef.current, {
-          xPercent: -50,
-          yPercent: -50,
+          gsap.set(sofaRef.current, {
+            xPercent: -50,
+            yPercent: -50,
           willChange: 'transform',
         })
 
-        gsap.from(sofaRef.current, {
-          opacity: 0,
-          duration: 0.55,
-          ease: 'power2.out',
-          delay: 0.28,
-        })
-
-        sofaTweenRef.current = createRandomPausedFrameTween({
-          frameDuration,
-          onUpdate: () => {
-            setAnimatedFrame(sofaImageRef, sofaFrames, sofaState.frame)
-          },
-          state: sofaState,
-          totalFrames,
-        })
-
-        sofaMoveTweenRef.current = gsap
-          .timeline({ repeat: -1, repeatDelay: 1.4 })
-          .to(sofaRef.current, {
-            left: '44.2%',
-            duration: 2.2,
-            ease: 'power1.inOut',
+          gsap.from(sofaRef.current, {
+            opacity: 0,
+            duration: 0.55,
+            ease: 'power2.out',
+            delay: 0.28,
           })
-          .to({}, { duration: 3.3 })
-          .to(sofaRef.current, {
-            left: '42%',
-            duration: 2.1,
-            ease: 'power1.inOut',
-          })
-      }
+
+          sofaTweenRef.current = gsap
+            .timeline({ repeat: -1, repeatRefresh: true })
+            .to(sofaState, {
+              frame: maxFrame,
+              duration: frameDuration,
+              ease: `steps(${maxFrame})`,
+              onUpdate: () => {
+                setAnimatedFrame(sofaImageRef, sofaFrames, sofaState.frame)
+              },
+            }, 0)
+            .to(sofaRef.current, {
+              left: '44.2%',
+              duration: 2.2,
+              ease: 'power1.inOut',
+            }, 0)
+            .to({}, { duration: sofaPauseDuration })
+            .to(sofaState, {
+              frame: 0,
+              duration: frameDuration,
+              ease: `steps(${maxFrame})`,
+              onUpdate: () => {
+                setAnimatedFrame(sofaImageRef, sofaFrames, sofaState.frame)
+              },
+            }, '>')
+            .to(sofaRef.current, {
+              left: '42%',
+              duration: 2.1,
+              ease: 'power1.inOut',
+            }, '<')
+
+          sofaMoveTweenRef.current = sofaTweenRef.current
+        }
 
       if (bibliotecarioRef.current && bibliotecarioImageRef.current) {
         const bibliotecarioState = { frame: 0 }
