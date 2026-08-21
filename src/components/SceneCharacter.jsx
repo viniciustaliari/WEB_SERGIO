@@ -10,9 +10,6 @@ function SceneCharacter(
     className = '',
     imageClassName,
     imageRef,
-    interactive = false,
-    onPointerEnter,
-    onPointerLeave,
     src,
     style,
   },
@@ -21,9 +18,7 @@ function SceneCharacter(
   return (
     <div
       ref={ref}
-      className={`${anchorClassName}${interactive ? ' pointer-events-auto cursor-pointer' : ''}${className ? ` ${className}` : ''}`}
-      onPointerEnter={onPointerEnter}
-      onPointerLeave={onPointerLeave}
+      className={`${anchorClassName}${className ? ` ${className}` : ''}`}
       style={style}
     >
       {bubbleText ? (

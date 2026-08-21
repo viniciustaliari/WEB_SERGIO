@@ -1,18 +1,16 @@
 import { useState } from 'react'
 
 const primaryItems = [
-  { label: '1. DISENO DE INTERIORES' },
-  { label: '2. PAISAJISMO' },
-  { label: '3. ESCENOGRAFIA' },
-  { label: '4. DISENO GRAFICO' },
-  { label: '5. DIRECCION DE ARTE' },
-  { label: '6. ACADEMIA' },
-  { label: 'PROYECTOS', pageId: 'projects' },
+  { label: '1. DISEÑO DE INTERIORES', pageId: 'projects', filterId: 'interiors' },
+  { label: '2. PAISAJISMO', pageId: 'projects', filterId: 'landscape' },
+  { label: '3. ESCENOGRAFÍA', pageId: 'projects', filterId: 'scenography' },
+  { label: '4. DISEÑO GRÁFICO', pageId: 'projects', filterId: 'graphic' },
+  { label: '5. DIRECCIÓN DE ARTE', pageId: 'projects', filterId: 'art-direction' },
+  { label: '6. ACADEMIA', pageId: 'projects', filterId: 'academy' },
   { label: 'TIENDA ONLINE', pageId: 'shop' },
 ]
 
 const secondaryItems = [
-  { label: 'PROYECTOS', pageId: 'projects' },
   { label: 'CONTACTO', pageId: 'contact' },
   { label: 'ESTUDIO', pageId: 'studio' },
 ]
@@ -22,13 +20,24 @@ export default function SceneMenu({ onNavigate }) {
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [isSpanish, setIsSpanish] = useState(false)
 
+  const handleNavigate = (item) => {
+    if (!item.pageId) return
+
+    onNavigate?.(
+      item.filterId
+        ? { pageId: item.pageId, filterId: item.filterId }
+        : item.pageId,
+    )
+    setIsOpen(false)
+  }
+
   return (
     <div className="scene-menu">
       <button
         type="button"
         className={`scene-menu-button${isOpen ? ' is-open' : ''}`}
         aria-expanded={isOpen}
-        aria-label={isOpen ? 'Cerrar menu' : 'Abrir menu'}
+        aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
         onClick={() => setIsOpen((current) => !current)}
       >
         <span></span>
@@ -41,7 +50,7 @@ export default function SceneMenu({ onNavigate }) {
           <button
             type="button"
             className="scene-menu-close"
-            aria-label="Cerrar menu"
+            aria-label="Cerrar menú"
             onClick={() => setIsOpen(false)}
           >
             <span></span>
@@ -54,12 +63,7 @@ export default function SceneMenu({ onNavigate }) {
                 key={item.label}
                 type="button"
                 className="scene-menu-item"
-                onClick={() => {
-                  if (item.pageId) {
-                    onNavigate?.(item.pageId)
-                    setIsOpen(false)
-                  }
-                }}
+                onClick={() => handleNavigate(item)}
               >
                 <span>{item.label}</span>
               </button>
@@ -72,12 +76,7 @@ export default function SceneMenu({ onNavigate }) {
                 key={item.label}
                 type="button"
                 className="scene-menu-item"
-                onClick={() => {
-                  if (item.pageId) {
-                    onNavigate?.(item.pageId)
-                    setIsOpen(false)
-                  }
-                }}
+                onClick={() => handleNavigate(item)}
               >
                 <span>{item.label}</span>
               </button>
@@ -143,7 +142,7 @@ export default function SceneMenu({ onNavigate }) {
                 </button>
               </div>
             </div>
-            <span className="scene-menu-code">228</span>
+            <span className="scene-menu-code">2 28</span>
           </div>
         </div>
       ) : null}

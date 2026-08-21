@@ -4,23 +4,23 @@ export const birdFrames = Array.from(
 )
 
 export const vanFrames = Array.from(
-  { length: 11 },
-  (_, index) => `/Frames/furgo/Frame ${index + 1}.png`,
+  { length: 21 },
+  (_, index) => `/Frames/furgo/${index}.png`,
 )
 
 export const grafitiFrames = Array.from(
-  { length: 14 },
-  (_, index) => `/Frames/grafiti/Frame ${index + 1}.png`,
+  { length: 15 },
+  (_, index) => `/Frames/grafiti/${index}.png`,
 )
 
 export const jardineroFrames = Array.from(
-  { length: 12 },
-  (_, index) => `/Frames/jardinero/${index + 1}.png`,
+  { length: 13 },
+  (_, index) => `/Frames/jardinero/${index}.png`,
 )
 
 export const jardineraFrames = Array.from(
-  { length: 15 },
-  (_, index) => `/Frames/jardinera/${index + 1}.png`,
+  { length: 16 },
+  (_, index) => `/Frames/jardinera/${index}.png`,
 )
 
 export const arbolFrames = Array.from(
@@ -49,13 +49,13 @@ export const bibliotecarioFrames = Array.from(
 )
 
 export const cuadroFrames = Array.from(
-  { length: 15 },
-  (_, index) => `/Frames/cuadro/${index + 1}.png`,
+  { length: 16 },
+  (_, index) => `/Frames/cuadro/${index}.png`,
 )
 
 export const telefonoFrames = Array.from(
   { length: 8 },
-  (_, index) => `/Frames/telefono/${index + 1}.png`,
+  (_, index) => `/Frames/telefono/${index}.png`,
 )
 
 export const parejaFrames = Array.from(
@@ -79,13 +79,13 @@ export const columpioFrames = Array.from(
 )
 
 export const profeFrames = Array.from(
-  { length: 16 },
-  (_, index) => `/Frames/profe/${index + 1}.png`,
+  { length: 17 },
+  (_, index) => `/Frames/profe/${index}.png`,
 )
 
 export const hombreSentadoFrames = Array.from(
-  { length: 9 },
-  (_, index) => `/Frames/hombre_sentado/${index + 1}.png`,
+  { length: 10 },
+  (_, index) => `/Frames/hombre_sentado/${index}.png`,
 )
 
 export const humoFrames = Array.from(
@@ -94,6 +94,6 @@ export const humoFrames = Array.from(
 )
 
 export const mujerSentadaFrames = Array.from(
-  { length: 11 },
-  (_, index) => `/Frames/mujer_sentada/${index + 1}.png`,
+  { length: 12 },
+  (_, index) => `/Frames/mujer_sentada/${index}.png`,
 )

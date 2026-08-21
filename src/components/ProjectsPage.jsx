@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
@@ -57,12 +57,17 @@ function ProjectCard({
 
 export default function ProjectsPage({
   activePage,
+  initialFilter = 'all',
   onBack,
   onNavigate,
   onOpenProject,
 }) {
   const [isSpanish, setIsSpanish] = useState(false)
-  const [activeFilter, setActiveFilter] = useState('all')
+  const [activeFilter, setActiveFilter] = useState(initialFilter)
+
+  useEffect(() => {
+    setActiveFilter(initialFilter)
+  }, [initialFilter])
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'all') return projectItems

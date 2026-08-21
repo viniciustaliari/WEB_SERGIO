@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import ContactPage from './components/ContactPage'
 import ProjectsPage from './components/ProjectsPage'
@@ -75,7 +75,7 @@ function setAnimatedFrame(imageRef, frames, frame) {
 }
 
 function getRandomReversePause() {
-  return gsap.utils.random(5, 10, 0.1)
+  return gsap.utils.random(2, 5, 0.1)
 }
 
 function createRandomPausedFrameTween({
@@ -111,6 +111,7 @@ const staticSceneAssets = [
   '/Frames/imoviles/personaje_escaleras/persona_1.png',
   '/Frames/imoviles/personajes_fiesta/Fiesta.png',
   '/Frames/imoviles/personaje_microfono/personaje.png',
+  '/Frames/imoviles/spray/spray.png',
 ]
 
 const sceneAssetUrls = [
@@ -138,6 +139,7 @@ export default function App() {
   const [isAssetsReady, setIsAssetsReady] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [activePage, setActivePage] = useState('home')
+  const [projectsFilter, setProjectsFilter] = useState('all')
   const rootRef = useRef(null)
   const sceneShellRef = useRef(null)
 
@@ -149,6 +151,7 @@ export default function App() {
   const vanBubbleRef = useRef(null)
   const vanMoveTweenRef = useRef(null)
   const vanFramesTweenRef = useRef(null)
+  const isVanMovingRef = useRef(false)
 
   const grafitiRef = useRef(null)
   const grafitiImageRef = useRef(null)
@@ -225,7 +228,21 @@ export default function App() {
   const sceneStyle = useSceneSize(sceneShellRef, sceneRatio)
 
   const handleNavigate = (nextSection) => {
+    if (typeof nextSection === 'object' && nextSection !== null) {
+      setActivePage(nextSection.pageId ?? 'home')
+
+      if (nextSection.pageId === 'projects') {
+        setProjectsFilter(nextSection.filterId ?? 'all')
+      }
+
+      return
+    }
+
     setActivePage(nextSection ?? 'home')
+
+    if (nextSection === 'projects') {
+      setProjectsFilter('all')
+    }
   }
 
   useEffect(() => {
@@ -245,13 +262,13 @@ export default function App() {
   }, [activePage, isAssetsReady, sceneStyle.height, sceneStyle.width])
 
   const handleVanEnter = () => {
-    vanFramesTweenRef.current?.pause()
+    if (isVanMovingRef.current) vanFramesTweenRef.current?.pause()
     vanMoveTweenRef.current?.pause()
     showBubble(vanBubbleRef)
   }
 
   const handleVanLeave = () => {
-    vanFramesTweenRef.current?.resume()
+    if (isVanMovingRef.current) vanFramesTweenRef.current?.resume()
     vanMoveTweenRef.current?.resume()
     hideBubble(vanBubbleRef)
   }
@@ -481,7 +498,10 @@ export default function App() {
       if (vanRef.current && vanImageRef.current) {
         const vanState = { frame: 0 }
         const totalFrames = vanFrames.length
-        const frameDuration = totalFrames / 18
+        const maxMovingFrame = totalFrames - 1
+        const frameDuration = maxMovingFrame / 11
+        const travelDuration = 4.2
+        const stopDuration = 3
 
         gsap.set(vanRef.current, {
           xPercent: -50,
@@ -491,15 +511,32 @@ export default function App() {
 
         setBubbleInitialState(vanBubbleRef)
 
+        // Frame 0 is reserved for the van at rest. The motion sequence loops at 11 FPS.
+        vanState.frame = 1
         vanFramesTweenRef.current = gsap.to(vanState, {
-          frame: totalFrames - 1,
+          frame: maxMovingFrame,
           duration: frameDuration,
-          ease: `steps(${totalFrames - 1})`,
+          ease: `steps(${maxMovingFrame - 1})`,
           repeat: -1,
-          onUpdate: () => {
-            setAnimatedFrame(vanImageRef, vanFrames, vanState.frame)
-          },
+          paused: true,
+          onUpdate: () => setAnimatedFrame(vanImageRef, vanFrames, vanState.frame),
         })
+
+        const startVanFrames = () => {
+          isVanMovingRef.current = true
+          vanState.frame = 1
+          setAnimatedFrame(vanImageRef, vanFrames, vanState.frame)
+          vanFramesTweenRef.current?.restart()
+        }
+
+        const stopVanFrames = () => {
+          isVanMovingRef.current = false
+          vanFramesTweenRef.current?.pause()
+          vanState.frame = 0
+          setAnimatedFrame(vanImageRef, vanFrames, vanState.frame)
+        }
+
+        stopVanFrames()
 
         gsap.from(vanRef.current, {
           opacity: 0,
@@ -508,14 +545,24 @@ export default function App() {
           delay: 0.35,
         })
 
-        vanMoveTweenRef.current = gsap.to(vanRef.current, {
-          left: '-8%',
-          duration: 4.2,
-          ease: 'power1.inOut',
-          repeat: -1,
-          yoyo: true,
-          repeatDelay: 3,
-        })
+        vanMoveTweenRef.current = gsap
+          .timeline({ repeat: -1 })
+          .to({}, { duration: stopDuration })
+          .call(startVanFrames)
+          .to(vanRef.current, {
+            left: '-8%',
+            duration: travelDuration,
+            ease: 'power1.inOut',
+          })
+          .call(stopVanFrames)
+          .to({}, { duration: stopDuration })
+          .call(startVanFrames)
+          .to(vanRef.current, {
+            left: '18%',
+            duration: travelDuration,
+            ease: 'power1.inOut',
+          })
+          .call(stopVanFrames)
       }
 
       if (grafitiRef.current && grafitiImageRef.current) {
@@ -995,7 +1042,7 @@ export default function App() {
       if (mujerSentadaRef.current && mujerSentadaImageRef.current) {
         const mujerSentadaState = { frame: 0 }
         const totalFrames = mujerSentadaFrames.length
-        const frameDuration = totalFrames / 4
+        const frameDuration = totalFrames / 3
 
         gsap.set(mujerSentadaRef.current, {
           xPercent: -50,
@@ -1029,7 +1076,7 @@ export default function App() {
       if (profeRef.current && profeImageRef.current) {
         const profeState = { frame: 0 }
         const totalFrames = profeFrames.length
-        const frameDuration = totalFrames / 4
+        const frameDuration = totalFrames / 3
 
         gsap.set(profeRef.current, {
           xPercent: -50,
@@ -1090,6 +1137,7 @@ export default function App() {
     return () => {
       vanMoveTweenRef.current = null
       vanFramesTweenRef.current = null
+      isVanMovingRef.current = false
       jardineroTweenRef.current = null
       jardineraTweenRef.current = null
       arbolTweenRef.current = null
@@ -1129,7 +1177,7 @@ export default function App() {
       onPointerLeave: handleBanquitoLeave,
       src: banquitoFrames[0],
       alt: 'Banquito animado',
-      style: { left: '63%', top: '52.8%', width: '6.6%' },
+      style: { left: '63%', top: '53.3%', width: '6.1%' },
     },
     {
       id: 'ordenador',
@@ -1169,7 +1217,7 @@ export default function App() {
       imageRef: grafitiImageRef,
       src: grafitiFrames[0],
       alt: 'Grafiti animado',
-      style: { left: '44%', top: '17.1%', width: '5.8%' },
+      style: { left: '45.2%', top: '16.7%', width: '9%' },
     },
     {
       id: 'bibliotecario',
@@ -1179,7 +1227,7 @@ export default function App() {
       imageRef: bibliotecarioImageRef,
       src: bibliotecarioFrames[0],
       alt: 'Bibliotecario animado',
-      style: { left: '42.8%', top: '40.1%', width: '8.5%' },
+      style: { left: '42.8%', top: '40.2%', width: '8.9%' },
     },
     {
       id: 'cuadro',
@@ -1189,7 +1237,7 @@ export default function App() {
       imageRef: cuadroImageRef,
       src: cuadroFrames[0],
       alt: 'Cuadro animado',
-      style: { left: '48%', top: '44.3%', width: '10%' },
+      style: { left: '48%', top: '43.9%', width: '11%' },
     },
     {
       id: 'sofa',
@@ -1214,7 +1262,7 @@ export default function App() {
       onPointerLeave: handleJardineroLeave,
       src: jardineroFrames[0],
       alt: 'Jardinero animado',
-      style: { left: '64.5%', top: '24%', width: '12.8%' },
+      style: { left: '63.3%', top: '24.6%', width: '12.4%' },
     },
     {
       id: 'jardinera',
@@ -1229,18 +1277,26 @@ export default function App() {
       onPointerLeave: handleJardineraLeave,
       src: jardineraFrames[0],
       alt: 'Jardinera animada',
-      style: { left: '58%', top: '28.9%', width: '6.9%' },
+      style: { left: '59%', top: '28.8%', width: '7.3%' },
     },
   ]
 
   const topCharacters = [
+    {
+      id: 'spray',
+      anchorClassName: 'spray-anchor',
+      imageClassName: 'spray-frame',
+      src: '/Frames/imoviles/spray/spray.png',
+      alt: 'Spray',
+      style: { left: '37.5%', top: '15.5%', width: '9%' },
+    },
     {
       id: 'persona-escaleras',
       anchorClassName: 'persona-escaleras-anchor',
       imageClassName: 'persona-escaleras-frame',
       src: '/Frames/imoviles/personaje_escaleras/persona_1.png',
       alt: 'Persona en las escaleras',
-      style: { left: '67.3%', top: '94%', width: '4%' },
+      style: { left: '67%', top: '94%', width: '4%' },
     },
     {
       id: 'personajes-fiesta',
@@ -1256,7 +1312,7 @@ export default function App() {
       imageClassName: 'maleta-frame',
       src: '/Frames/imoviles/maleta/maleta.png',
       alt: 'Maleta',
-      style: { left: '25.5%', top: '73.5%', width: '3.1%' },
+      style: { left: '25.7%', top: '73.8%', width: '3.1%' },
     },
     {
       id: 'fumador',
@@ -1264,7 +1320,7 @@ export default function App() {
       imageClassName: 'fumador-frame',
       src: '/Frames/imoviles/fumador/fumador.png',
       alt: 'Fumador',
-      style: { left: '29%', top: '28.5%', width: '4%' },
+      style: { left: '29%', top: '28.6%', width: '4%' },
     },
     {
       id: 'telefono',
@@ -1292,7 +1348,7 @@ export default function App() {
       imageRef: parejaImageRef,
       src: parejaFrames[0],
       alt: 'Pareja animada',
-      style: { left: '65.5%', top: '67%', width: '8%' },
+      style: { left: '66%', top: '69%', width: '8%' },
     },
     {
       id: 'personaje-microfono',
@@ -1300,7 +1356,7 @@ export default function App() {
       imageClassName: 'personaje-microfono-frame',
       src: '/Frames/imoviles/personaje_microfono/personaje.png',
       alt: 'Personaje con microfono',
-      style: { left: '54.4%', top: '60.2%', width: '5.5%' },
+      style: { left: '54%', top: '60.6%', width: '5.3%' },
     },
     {
       id: 'tablero',
@@ -1308,7 +1364,7 @@ export default function App() {
       imageClassName: 'tablero-frame',
       src: '/Frames/imoviles/tablero/tablero.png',
       alt: 'Tablero',
-      style: { left: '33.4%', top: '72.2%', width: '4.8%', zIndex: 120 },
+      style: { left: '33.4%', top: '72%', width: '4.8%', zIndex: 120 },
     },
     {
       id: 'humo',
@@ -1328,7 +1384,7 @@ export default function App() {
       imageRef: personasSillasImageRef,
       src: personasSillasFrames[0],
       alt: 'Personas en sillas animadas',
-      style: { left: '56%', top: '70.1%', width: '6%' },
+      style: { left: '55.5%', top: '70%', width: '6%' },
     },
     {
       id: 'lector',
@@ -1338,7 +1394,7 @@ export default function App() {
       imageRef: lectorImageRef,
       src: lectorFrames[0],
       alt: 'Lector animado',
-      style: { left: '51.8%', top: '67.4%', width: '3.6%' },
+      style: { left: '51.5%', top: '67.4%', width: '3.8%' },
     },
     {
       id: 'hombre-sentado',
@@ -1353,7 +1409,7 @@ export default function App() {
       onPointerLeave: handleHombreSentadoLeave,
       src: hombreSentadoFrames[0],
       alt: 'Hombre sentado animado',
-      style: { left: '38%', top: '78.2%', width: '6.6%' },
+      style: { left: '38.2%', top: '78%', width: '6.6%' },
     },
     {
       id: 'mujer-sentada',
@@ -1368,7 +1424,7 @@ export default function App() {
       onPointerLeave: handleMujerSentadaLeave,
       src: mujerSentadaFrames[0],
       alt: 'Mujer sentada animada',
-      style: { left: '34%', top: '79%', width: '5.7%', zIndex: 130 },
+      style: { left: '34%', top: '78.2%', width: '6.3%', zIndex: 130 },
     },
     {
       id: 'profe',
@@ -1383,7 +1439,7 @@ export default function App() {
       onPointerLeave: handleProfeLeave,
       src: profeFrames[0],
       alt: 'Profe animado',
-      style: { left: '46%', top: '77.8%', width: '7%' },
+      style: { left: '46%', top: '76.9%', width: '7.9%' },
     },
     {
       id: 'columpio',
@@ -1398,7 +1454,7 @@ export default function App() {
       onPointerLeave: handleColumpioLeave,
       src: columpioFrames[0],
       alt: 'Columpio animado',
-      style: { left: '69%', top: '55%', width: '22%' },
+      style: { left: '69.2%', top: '54.4%', width: '21.3%' },
     },
   ]
 
@@ -1407,7 +1463,7 @@ export default function App() {
     anchorClassName: 'van-anchor',
     bubbleClassName: 'van-dialogue',
     bubbleRef: vanBubbleRef,
-    bubbleText: 'direccion de arte',
+    bubbleText: 'dirección de arte',
     imageClassName: 'van-frame',
     imageRef: vanImageRef,
     interactive: true,
@@ -1415,7 +1471,7 @@ export default function App() {
     onPointerLeave: handleVanLeave,
     src: vanFrames[0],
     alt: 'Furgo animada',
-    style: { left: '20%', top: '77.5%', width: '16%' },
+    style: { left: '18%', top: '74.1%', width: '24%' },
   }
 
   const birdCharacter = {
@@ -1433,10 +1489,10 @@ export default function App() {
     alt: 'Capa central de la casa',
     className: 'absolute left-1/2 top-1/2 w-full object-contain',
     style: {
-      left: '50%',
-      top: '61.2%',
-      width: '100%',
-      transform: 'translate(-50%, -50%) scale(1.17)',
+      left: '49.9%',
+      top: '57.9%',
+      width: '98.2%',
+      transform: 'translate(-50%, -50%) scale(1.2)',
     },
   }
 
@@ -1445,7 +1501,9 @@ export default function App() {
     alt: 'Cartela',
     className: 'cartela-layer absolute bottom-0 right-0 object-contain',
     style: {
-      width: '18%',
+      right: '-0.2%',
+      bottom: '-1%',
+      width: '18.3%',
     },
   }
 
@@ -1461,6 +1519,7 @@ export default function App() {
       {isAssetsReady && activePage === 'projects' ? (
         <ProjectsPage
           activePage={activePage}
+          initialFilter={projectsFilter}
           onBack={() => setActivePage('home')}
           onNavigate={handleNavigate}
           onOpenProject={(projectId) => {
@@ -1529,3 +1588,4 @@ export default function App() {
     </main>
   )
 }
+

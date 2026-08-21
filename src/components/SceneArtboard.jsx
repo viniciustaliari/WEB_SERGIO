@@ -24,22 +24,22 @@ export default function SceneArtboard({
         src={backgroundSrc}
         alt="Fondo base de la composicion"
         onLoad={onBackgroundLoad}
-        className="absolute inset-0 h-full w-full object-fill"
+        className="scene-background absolute inset-0 h-full w-full object-fill"
       />
 
-      <div className="absolute -right-[0.2%] top-0 z-[60]">
+      <div className="pointer-events-none absolute inset-0 z-[60]">
         <SceneMenu onNavigate={onNavigate} />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
+      <div className="scene-character-layer pointer-events-none absolute inset-0 z-30 overflow-hidden">
         <SceneCharacter {...van} />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div className="scene-character-layer pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <SceneCharacter {...bird} />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-50 overflow-visible">
+      <div className="scene-character-layer pointer-events-none absolute inset-0 z-50 overflow-visible">
         {superTopCharacters.map((character) => (
           <SceneCharacter key={character.id} {...character} />
         ))}
@@ -60,13 +60,13 @@ export default function SceneArtboard({
         <div className="scene-inner absolute inset-0">
           <div className="absolute inset-0 z-0 overflow-hidden"></div>
 
-          <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+          <div className="scene-character-layer pointer-events-none absolute inset-0 z-20 overflow-hidden">
             {overlayCharacters.map((character) => (
               <SceneCharacter key={character.id} {...character} />
             ))}
           </div>
 
-          <div className="pointer-events-none absolute inset-0 z-40 overflow-visible">
+          <div className="scene-character-layer pointer-events-none absolute inset-0 z-40 overflow-visible">
             {topCharacters.map((character) => (
               <SceneCharacter key={character.id} {...character} />
             ))}

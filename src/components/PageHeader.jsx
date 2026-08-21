@@ -15,7 +15,7 @@ export default function PageHeader({
   return (
     <header className="projects-page-header">
       <button type="button" className="projects-page-brand" onClick={onBack}>
-        228
+        2 28
       </button>
 
       <div className="projects-page-nav-row">
