@@ -143,6 +143,41 @@ a {
   transform: translateY(0.1%);
 }
 
+.scene-hotspot-region {
+  position: absolute;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.scene-hotspot-region--visible {
+  border: 1px solid rgba(180, 43, 43, 0.62);
+  background: rgba(216, 66, 66, 0.16);
+}
+
+.scene-hotspot-dialogue {
+  position: absolute;
+  z-index: 1;
+  width: max-content;
+  max-width: 13rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #171717;
+  background: #fffef8;
+  color: #171717;
+  font-family: var(--font-condensed);
+  font-size: clamp(0.55rem, 0.9vw, 0.9rem);
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.35rem);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.scene-hotspot:has(.scene-hotspot-region:hover) .scene-hotspot-dialogue {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .scene-inner {
   transform: none;
 }

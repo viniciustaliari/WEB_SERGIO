@@ -1,4 +1,5 @@
 import SceneCharacter from './SceneCharacter'
+import SceneHotspot from './SceneHotspot'
 import SceneMenu from './SceneMenu'
 
 export default function SceneArtboard({
@@ -9,6 +10,7 @@ export default function SceneArtboard({
   onNavigate,
   onBackgroundLoad,
   overlayCharacters,
+  hotspots = [],
   superTopCharacters = [],
   topCharacters = [],
   sceneStyle,
@@ -55,6 +57,12 @@ export default function SceneArtboard({
           />
         </div>
       ) : null}
+
+      <div className="pointer-events-none absolute inset-0 z-[45]">
+        {hotspots.map((hotspot) => (
+          <SceneHotspot key={hotspot.id} {...hotspot} />
+        ))}
+      </div>
 
       <div className="scene-overlay absolute inset-0">
         <div className="scene-inner absolute inset-0">

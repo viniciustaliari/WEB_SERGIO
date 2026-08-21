@@ -155,6 +155,7 @@ export default function App() {
 
   const grafitiRef = useRef(null)
   const grafitiImageRef = useRef(null)
+  const grafitiTweenRef = useRef(null)
 
   const jardineroRef = useRef(null)
   const jardineroImageRef = useRef(null)
@@ -271,6 +272,82 @@ export default function App() {
     if (isVanMovingRef.current) vanFramesTweenRef.current?.resume()
     vanMoveTweenRef.current?.resume()
     hideBubble(vanBubbleRef)
+  }
+
+  const handleArtDirectionZoneEnter = () => {
+    if (vanMoveTweenRef.current?.isActive()) return
+
+    vanMoveTweenRef.current?.restart()
+  }
+
+  const handleStudioZoneEnter = () => {
+    grafitiTweenRef.current?.resume()
+  }
+
+  const handleStudioZoneLeave = () => {
+    grafitiTweenRef.current?.pause()
+  }
+
+  const handleLandscapeZoneEnter = () => {
+    jardineroTweenRef.current?.resume()
+    jardineraTweenRef.current?.resume()
+  }
+
+  const handleLandscapeZoneLeave = () => {
+    jardineroTweenRef.current?.pause()
+    jardineraTweenRef.current?.pause()
+  }
+
+  const handleAcademyZoneEnter = () => {
+    hombreSentadoTweenRef.current?.resume()
+    mujerSentadaTweenRef.current?.resume()
+    profeTweenRef.current?.resume()
+  }
+
+  const handleAcademyZoneLeave = () => {
+    hombreSentadoTweenRef.current?.pause()
+    mujerSentadaTweenRef.current?.pause()
+    profeTweenRef.current?.pause()
+  }
+
+  const handlePhoneZoneEnter = () => {
+    telefonoTweenRef.current?.resume()
+    telefonoMoveTweenRef.current?.resume()
+  }
+
+  const handlePhoneZoneLeave = () => {
+    telefonoTweenRef.current?.pause()
+    telefonoMoveTweenRef.current?.pause()
+  }
+
+  const handleDesignZoneEnter = () => {
+    bibliotecarioTweenRef.current?.resume()
+    cuadroTweenRef.current?.resume()
+    sofaTweenRef.current?.resume()
+    ordenadorTweenRef.current?.resume()
+    banquitoTweenRef.current?.resume()
+  }
+
+  const handleDesignZoneLeave = () => {
+    bibliotecarioTweenRef.current?.pause()
+    cuadroTweenRef.current?.pause()
+    sofaTweenRef.current?.pause()
+    ordenadorTweenRef.current?.pause()
+    banquitoTweenRef.current?.pause()
+  }
+
+  const handleScenographyZoneEnter = () => {
+    lectorTweenRef.current?.resume()
+    personasSillasTweenRef.current?.resume()
+    parejaTweenRef.current?.resume()
+    columpioTweenRef.current?.resume()
+  }
+
+  const handleScenographyZoneLeave = () => {
+    lectorTweenRef.current?.pause()
+    personasSillasTweenRef.current?.pause()
+    parejaTweenRef.current?.pause()
+    columpioTweenRef.current?.pause()
   }
 
   const handleJardineroEnter = () => {
@@ -501,7 +578,7 @@ export default function App() {
         const maxMovingFrame = totalFrames - 1
         const frameDuration = maxMovingFrame / 11
         const travelDuration = 4.2
-        const stopDuration = 3
+        const stopDuration = 1.5
 
         gsap.set(vanRef.current, {
           xPercent: -50,
@@ -511,7 +588,7 @@ export default function App() {
 
         setBubbleInitialState(vanBubbleRef)
 
-        // Frame 0 is reserved for the van at rest. The motion sequence loops at 11 FPS.
+        // Frame 0 is reserved for the van at rest. The moving sequence loops at 11 FPS.
         vanState.frame = 1
         vanFramesTweenRef.current = gsap.to(vanState, {
           frame: maxMovingFrame,
@@ -546,8 +623,7 @@ export default function App() {
         })
 
         vanMoveTweenRef.current = gsap
-          .timeline({ repeat: -1 })
-          .to({}, { duration: stopDuration })
+          .timeline({ paused: true })
           .call(startVanFrames)
           .to(vanRef.current, {
             left: '-8%',
@@ -583,7 +659,7 @@ export default function App() {
           delay: 0.25,
         })
 
-        createRandomPausedFrameTween({
+        grafitiTweenRef.current = createRandomPausedFrameTween({
           frameDuration,
           onUpdate: () => {
             setAnimatedFrame(grafitiImageRef, grafitiFrames, grafitiState.frame)
@@ -591,6 +667,7 @@ export default function App() {
           state: grafitiState,
           totalFrames,
         })
+        grafitiTweenRef.current.pause()
       }
 
       if (jardineroRef.current && jardineroImageRef.current) {
@@ -621,6 +698,7 @@ export default function App() {
           state: jardineroState,
           totalFrames,
         })
+        jardineroTweenRef.current.pause()
       }
 
       if (jardineraRef.current && jardineraImageRef.current) {
@@ -651,6 +729,7 @@ export default function App() {
           state: jardineraState,
           totalFrames,
         })
+        jardineraTweenRef.current.pause()
       }
 
       if (arbolRef.current && arbolImageRef.current) {
@@ -703,6 +782,7 @@ export default function App() {
           state: ordenadorState,
           totalFrames,
         })
+        ordenadorTweenRef.current.pause()
       }
 
       if (banquitoRef.current && banquitoImageRef.current) {
@@ -733,6 +813,7 @@ export default function App() {
           state: banquitoState,
           totalFrames,
         })
+        banquitoTweenRef.current.pause()
       }
 
         if (sofaRef.current && sofaImageRef.current) {
@@ -786,6 +867,7 @@ export default function App() {
             }, '<')
 
           sofaMoveTweenRef.current = sofaTweenRef.current
+          sofaTweenRef.current.pause()
         }
 
       if (bibliotecarioRef.current && bibliotecarioImageRef.current) {
@@ -818,6 +900,7 @@ export default function App() {
           state: bibliotecarioState,
           totalFrames,
         })
+        bibliotecarioTweenRef.current.pause()
       }
 
       if (cuadroRef.current && cuadroImageRef.current) {
@@ -846,6 +929,7 @@ export default function App() {
           state: cuadroState,
           totalFrames,
         })
+        cuadroTweenRef.current.pause()
       }
 
       if (telefonoRef.current && telefonoImageRef.current) {
@@ -876,6 +960,7 @@ export default function App() {
           state: telefonoState,
           totalFrames,
         })
+        telefonoTweenRef.current.pause()
 
         telefonoMoveTweenRef.current = gsap.to(telefonoRef.current, {
           yPercent: -54,
@@ -886,6 +971,7 @@ export default function App() {
           yoyo: true,
           repeatDelay: 10,
         })
+        telefonoMoveTweenRef.current.pause()
       }
 
       if (parejaRef.current && parejaImageRef.current) {
@@ -914,6 +1000,7 @@ export default function App() {
           state: parejaState,
           totalFrames,
         })
+        parejaTweenRef.current.pause()
       }
 
       if (personasSillasRef.current && personasSillasImageRef.current) {
@@ -946,6 +1033,7 @@ export default function App() {
           state: personasSillasState,
           totalFrames,
         })
+        personasSillasTweenRef.current.pause()
       }
 
       if (lectorRef.current && lectorImageRef.current) {
@@ -974,12 +1062,13 @@ export default function App() {
           state: lectorState,
           totalFrames,
         })
+        lectorTweenRef.current.pause()
       }
 
       if (humoRef.current && humoImageRef.current) {
         const humoState = { frame: 0 }
         const totalFrames = humoFrames.length
-        const frameDuration = totalFrames / 4
+        const frameDuration = (totalFrames - 1) / 4
 
         gsap.set(humoRef.current, {
           xPercent: -50,
@@ -999,6 +1088,7 @@ export default function App() {
           duration: frameDuration,
           ease: `steps(${totalFrames - 1})`,
           repeat: -1,
+          repeatDelay: 0,
           onUpdate: () => {
             setAnimatedFrame(humoImageRef, humoFrames, humoState.frame)
           },
@@ -1037,6 +1127,7 @@ export default function App() {
           state: hombreSentadoState,
           totalFrames,
         })
+        hombreSentadoTweenRef.current.pause()
       }
 
       if (mujerSentadaRef.current && mujerSentadaImageRef.current) {
@@ -1071,6 +1162,7 @@ export default function App() {
           state: mujerSentadaState,
           totalFrames,
         })
+        mujerSentadaTweenRef.current.pause()
       }
 
       if (profeRef.current && profeImageRef.current) {
@@ -1101,6 +1193,7 @@ export default function App() {
           state: profeState,
           totalFrames,
         })
+        profeTweenRef.current.pause()
       }
 
       if (columpioRef.current && columpioImageRef.current) {
@@ -1131,6 +1224,7 @@ export default function App() {
           state: columpioState,
           totalFrames,
         })
+        columpioTweenRef.current.pause()
       }
     }, rootRef)
 
@@ -1138,6 +1232,7 @@ export default function App() {
       vanMoveTweenRef.current = null
       vanFramesTweenRef.current = null
       isVanMovingRef.current = false
+      grafitiTweenRef.current = null
       jardineroTweenRef.current = null
       jardineraTweenRef.current = null
       arbolTweenRef.current = null
@@ -1204,8 +1299,8 @@ export default function App() {
       alt: 'Arbol animado',
       style: {
         left: '89%',
-        top: '67%',
-        width: '24%',
+        top: '60.9%',
+        width: '31%',
         transform: 'translate(-50%, -50%)',
       },
     },
@@ -1484,6 +1579,138 @@ export default function App() {
     style: { left: '-16%', top: '28%', width: '20%' },
   }
 
+  // Add one or more rectangular regions per department to compose irregular rooms.
+  const sceneHotspots = [
+    {
+      id: '228-estudio',
+      label: '2 28 ESTUDIO',
+      dialogueStyle: { left: '34%', top: '10%' },
+      onPointerEnter: handleStudioZoneEnter,
+      onPointerLeave: handleStudioZoneLeave,
+      regions: [
+        {
+          left: '39%',
+          top: '10%',
+          width: '10%',
+          height: '12%',
+        },
+      ],
+    },
+    {
+      id: 'paisajismo',
+      label: 'PAISAJISMO',
+      dialogueStyle: { left: '65%', top: '15%' },
+      onPointerEnter: handleLandscapeZoneEnter,
+      onPointerLeave: handleLandscapeZoneLeave,
+      regions: [
+        {
+          left: '49%',
+          top: '10%',
+          width: '15%',
+          height: '21%',
+        },
+      ],
+    },
+    {
+      id: 'academia',
+      label: 'ACADEMIA',
+      dialogueStyle: { left: '30%', top: '66%' },
+      onPointerEnter: handleAcademyZoneEnter,
+      onPointerLeave: handleAcademyZoneLeave,
+      regions: [
+        {
+          left: '32%',
+          top: '68%',
+          width: '16.6%',
+          height: '16%',
+        },
+      ],
+    },
+    {
+      id: 'telefono',
+      label: 'TELÉFONO',
+      dialogueStyle: { left: '57%', top: '81%' },
+      onPointerEnter: handlePhoneZoneEnter,
+      onPointerLeave: handlePhoneZoneLeave,
+      regions: [
+        {
+          left: '61%',
+          top: '81%',
+          width: '5%',
+          height: '8%',
+        },
+      ],
+    },
+    {
+      id: 'diseno',
+      label: 'DISEÑO',
+      dialogueStyle: { left: '33%', top: '32%' },
+      onPointerEnter: handleDesignZoneEnter,
+      onPointerLeave: handleDesignZoneLeave,
+      regions: [
+        {
+          left: '39%',
+          top: '22%',
+          width: '10%',
+          height: '34%',
+        },
+        {
+          left: '49%',
+          top: '31%',
+          width: '4%',
+          height: '25%',
+        },
+        {
+          left: '53%',
+          top: '31%',
+          width: '10.6%',
+          height: '20%',
+        },
+      ],
+    },
+    {
+      id: 'escenografia',
+      label: 'ESCENOGRAFÍA',
+      dialogueStyle: { left: '70%', top: '39%' },
+      onPointerEnter: handleScenographyZoneEnter,
+      onPointerLeave: handleScenographyZoneLeave,
+      regions: [
+        {
+          left: '48.7%',
+          top: '57%',
+          width: '4.4%',
+          height: '18%',
+        },
+        {
+          left: '53%',
+          top: '51.3%',
+          width: '10.6%',
+          height: '23.7%',
+        },
+        {
+          left: '63.6%',
+          top: '27%',
+          width: '13%',
+          height: '48%',
+        },
+      ],
+    },
+    {
+      id: 'direccion-de-arte',
+      label: 'DIRECCIÓN DE ARTE',
+      dialogueStyle: { left: '5%', top: '60%' },
+      onPointerEnter: handleArtDirectionZoneEnter,
+      regions: [
+        {
+          left: '7%',
+          top: '62%',
+          width: '20%',
+          height: '22%',
+        },
+      ],
+    },
+  ]
+
   const houseLayer = {
     src: '/Casa.png',
     alt: 'Capa central de la casa',
@@ -1559,6 +1786,7 @@ export default function App() {
               bird={birdCharacter}
               cartela={cartelaLayer}
               house={houseLayer}
+              hotspots={sceneHotspots}
               onNavigate={handleNavigate}
               onBackgroundLoad={handleBackgroundLoad}
               overlayCharacters={overlayCharacters}
