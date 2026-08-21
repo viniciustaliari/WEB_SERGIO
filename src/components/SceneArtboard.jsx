@@ -58,7 +58,7 @@ export default function SceneArtboard({
         </div>
       ) : null}
 
-      <div className="pointer-events-none absolute inset-0 z-[45]">
+      <div className="pointer-events-none absolute inset-0 z-[59]">
         {hotspots.map((hotspot) => (
           <SceneHotspot key={hotspot.id} {...hotspot} />
         ))}
