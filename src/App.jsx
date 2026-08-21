@@ -1585,6 +1585,7 @@ export default function App() {
       id: '228-estudio',
       label: '2 28 ESTUDIO',
       dialogueStyle: { left: '34%', top: '10%' },
+      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'all' }),
       onPointerEnter: handleStudioZoneEnter,
       onPointerLeave: handleStudioZoneLeave,
       regions: [
@@ -1600,6 +1601,7 @@ export default function App() {
       id: 'paisajismo',
       label: 'PAISAJISMO',
       dialogueStyle: { left: '65%', top: '15%' },
+      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'landscape' }),
       onPointerEnter: handleLandscapeZoneEnter,
       onPointerLeave: handleLandscapeZoneLeave,
       regions: [
@@ -1615,6 +1617,7 @@ export default function App() {
       id: 'academia',
       label: 'ACADEMIA',
       dialogueStyle: { left: '30%', top: '66%' },
+      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'academy' }),
       onPointerEnter: handleAcademyZoneEnter,
       onPointerLeave: handleAcademyZoneLeave,
       regions: [
@@ -1630,6 +1633,7 @@ export default function App() {
       id: 'telefono',
       label: 'TELÉFONO',
       dialogueStyle: { left: '57%', top: '81%' },
+      onClick: () => handleNavigate('contact'),
       onPointerEnter: handlePhoneZoneEnter,
       onPointerLeave: handlePhoneZoneLeave,
       regions: [
@@ -1645,6 +1649,7 @@ export default function App() {
       id: 'diseno',
       label: 'DISEÑO',
       dialogueStyle: { left: '33%', top: '32%' },
+      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'interiors' }),
       onPointerEnter: handleDesignZoneEnter,
       onPointerLeave: handleDesignZoneLeave,
       regions: [
@@ -1672,6 +1677,7 @@ export default function App() {
       id: 'escenografia',
       label: 'ESCENOGRAFÍA',
       dialogueStyle: { left: '70%', top: '39%' },
+      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'scenography' }),
       onPointerEnter: handleScenographyZoneEnter,
       onPointerLeave: handleScenographyZoneLeave,
       regions: [
@@ -1699,6 +1705,7 @@ export default function App() {
       id: 'direccion-de-arte',
       label: 'DIRECCIÓN DE ARTE',
       dialogueStyle: { left: '5%', top: '60%' },
+      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'art-direction' }),
       onPointerEnter: handleArtDirectionZoneEnter,
       regions: [
         {

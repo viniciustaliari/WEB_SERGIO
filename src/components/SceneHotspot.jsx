@@ -2,6 +2,7 @@ export default function SceneHotspot({
   dialogueStyle,
   isVisible = false,
   label,
+  onClick,
   onPointerEnter,
   onPointerLeave,
   regions,
@@ -12,6 +13,7 @@ export default function SceneHotspot({
         <div
           key={`${label}-${index}`}
           className={`scene-hotspot-region pointer-events-auto${isVisible ? ' scene-hotspot-region--visible' : ''}`}
+          onClick={onClick}
           onPointerEnter={onPointerEnter}
           onPointerLeave={onPointerLeave}
           style={region}
