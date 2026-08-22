@@ -1,5 +1,6 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import AcademyPage from './components/AcademyPage'
 import ContactPage from './components/ContactPage'
 import ProjectsPage from './components/ProjectsPage'
 import SceneArtboard from './components/SceneArtboard'
@@ -1617,7 +1618,7 @@ export default function App() {
       id: 'academia',
       label: 'ACADEMIA',
       dialogueStyle: { left: '30%', top: '66%' },
-      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'academy' }),
+      onClick: () => handleNavigate('academy'),
       onPointerEnter: handleAcademyZoneEnter,
       onPointerLeave: handleAcademyZoneLeave,
       regions: [
@@ -1781,6 +1782,12 @@ export default function App() {
         />
       ) : isAssetsReady && activePage === 'shop' ? (
         <ShopPage
+          activePage={activePage}
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'academy' ? (
+        <AcademyPage
           activePage={activePage}
           onBack={() => setActivePage('home')}
           onNavigate={handleNavigate}

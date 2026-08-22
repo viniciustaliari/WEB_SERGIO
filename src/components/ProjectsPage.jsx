@@ -13,13 +13,13 @@ const projectItems = [
   { title: 'Identidad Corporativa Eneo', location: 'Madrid, Espa\u00f1a', category: 'art-direction', iconSrc: '/proyectos/iconos/eneo.png', imageSrc: '/proyectos/imagenes/eneo.png' },
   { title: 'Cartel de Fiestas Locales', location: 'San Rafael (Segovia), Espa\u00f1a', category: 'graphic', iconSrc: '/proyectos/iconos/fiestas_locales.png', imageSrc: '/proyectos/imagenes/fiestas_locales.png' },
   { title: 'Dise\u00f1o Editorial y Packaging', location: 'Santander, Espa\u00f1a', category: 'graphic', iconSrc: '/proyectos/iconos/editorial_packaging.png', imageSrc: '/proyectos/imagenes/editorial_packaging.png' },
-  { title: 'Colecci\u00f3n de Ilustraciones Plantae', location: 'Villaviciosa (Madrid), Espa\u00f1a', category: 'academy', iconSrc: '/proyectos/iconos/plantae.png', imageSrc: '/proyectos/imagenes/plantae.png' },
+  { title: 'Colecci\u00f3n de Ilustraciones Plantae', location: 'Villaviciosa (Madrid), Espa\u00f1a', category: 'scenography', iconSrc: '/proyectos/iconos/plantae.png', imageSrc: '/proyectos/imagenes/plantae.png' },
   { title: 'Silla CROSS', location: 'Madrid, Espa\u00f1a', category: 'interiors', iconSrc: '/proyectos/iconos/CROSS.png', imageSrc: '/proyectos/imagenes/CROSS.png' },
   { title: 'Escenograf\u00eda UFV', location: 'Madrid, Espa\u00f1a', category: 'scenography', iconSrc: '/proyectos/iconos/UFV.png', imageSrc: '/proyectos/imagenes/UFV.png' },
   { title: 'Vivienda y Playground Hormiguero', location: 'Pontevedra, Espa\u00f1a', category: 'interiors', iconSrc: '/proyectos/iconos/hormiguero.png', imageSrc: '/proyectos/imagenes/hormiguero.png' },
   { title: 'Iluminaci\u00f3n de Capilla en ETSAM', location: 'Madrid, Espa\u00f1a', category: 'art-direction', iconSrc: '/proyectos/iconos/ETSAM.png', imageSrc: '/proyectos/imagenes/ETSAM.png' },
   { title: 'Identidad Corporativa PG', location: 'Madrid, Espa\u00f1a', category: 'graphic', iconSrc: '/proyectos/iconos/corporativa_pg.png', imageSrc: '/proyectos/imagenes/corporativa_pg.png' },
-  { title: 'Escultura El Barco', location: 'Madrid, Espa\u00f1a', category: 'academy', iconSrc: '/proyectos/iconos/el_barco.png', imageSrc: '/proyectos/imagenes/el_barco.png' },
+  { title: 'Escultura El Barco', location: 'Madrid, Espa\u00f1a', category: 'scenography', iconSrc: '/proyectos/iconos/el_barco.png', imageSrc: '/proyectos/imagenes/el_barco.png' },
   { id: 'telefonica', title: 'Proyecto de Oficinas en Edificio Telef\u00f3nica', location: 'Segovia, Espa\u00f1a', category: 'interiors', iconSrc: '/proyectos/iconos/edificio_telefonica.png', imageSrc: '/proyectos/imagenes/edificio_telefonica.png' },
   { title: 'Proyecto Ajardinamiento MITECO', location: 'Madrid, Espa\u00f1a', category: 'landscape', iconSrc: '/proyectos/iconos/MITECO.png', imageSrc: '/proyectos/imagenes/MITECO.png' },
   { title: 'Proyecto Centro cultural El Bosque', location: 'Madrid, Espa\u00f1a', category: 'landscape', iconSrc: '/proyectos/iconos/EL_BOSQUE.png', imageSrc: '/proyectos/imagenes/EL_BOSQUE.png' },
@@ -32,6 +32,7 @@ const projectItems = [
 ]
 
 function ProjectCard({
+  projectId,
   title,
   location,
   category,
@@ -40,17 +41,23 @@ function ProjectCard({
   onOpen,
 }) {
   return (
-    <article className="projects-card" data-category={category} onClick={onOpen}>
-      <div className="projects-card-media">
-        <div className="projects-card-icon">
-          <img src={iconSrc} alt="" aria-hidden="true" />
+    <article
+      className={`projects-card${projectId ? ` projects-card--${projectId}` : ''}`}
+      data-category={category}
+      onClick={onOpen}
+    >
+      <div className="projects-card-content">
+        <div className="projects-card-media">
+          <div className="projects-card-icon">
+            <img src={iconSrc} alt="" aria-hidden="true" />
+          </div>
         </div>
-        <div className="projects-card-image">
-          <img src={imageSrc} alt="" aria-hidden="true" />
-        </div>
+        <h3>{title}</h3>
+        <p>{location}</p>
       </div>
-      <h3>{title}</h3>
-      <p>{location}</p>
+      <div className="projects-card-image">
+        <img src={imageSrc} alt="" aria-hidden="true" />
+      </div>
     </article>
   )
 }
@@ -93,6 +100,7 @@ export default function ProjectsPage({
         {filteredProjects.map((project) => (
           <ProjectCard
             key={project.title}
+            projectId={project.id}
             title={project.title}
             location={project.location}
             category={project.category}

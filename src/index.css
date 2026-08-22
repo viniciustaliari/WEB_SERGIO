@@ -143,11 +143,21 @@ a {
   transform: translateY(0.1%);
 }
 
+.scene-hotspots-layer {
+  z-index: 100;
+  pointer-events: none;
+}
+
+.scene-hotspot {
+  pointer-events: none;
+}
+
 .scene-hotspot-region {
   position: absolute;
   border: 0;
   background: transparent;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .scene-hotspot-region--visible {
@@ -1042,23 +1052,36 @@ a {
 .projects-page-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 3rem 2rem;
+  gap: 0;
   flex: 1 0 auto;
   align-items: start;
   justify-items: center;
 }
 
 .projects-card {
+  position: relative;
   display: grid;
-  gap: 0.55rem;
+  place-items: center;
   cursor: pointer;
-  width: min(100%, 18rem);
+  width: 100%;
+  aspect-ratio: 16 / 10;
   align-self: start;
+  overflow: hidden;
+}
+
+.projects-card-content {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  width: auto;
+  max-width: 100%;
+  height: 100%;
+  padding-bottom: 0.3rem;
+  aspect-ratio: 1 / 0.84;
 }
 
 .projects-card-media {
   position: relative;
-  aspect-ratio: 1 / 0.68;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -1082,8 +1105,14 @@ a {
   object-fit: contain;
 }
 
+.projects-card--telefonica .projects-card-icon img {
+  width: 68%;
+  height: 68%;
+}
+
 .projects-card-image {
   opacity: 0;
+  z-index: 1;
   background:
     linear-gradient(135deg, rgba(17, 17, 17, 0.08), transparent 35%),
     linear-gradient(145deg, #dad3c6, #f2eee7 60%, #cfc6b7);
@@ -1109,9 +1138,11 @@ a {
   margin: 0;
   text-align: center;
   font-family: var(--font-condensed);
+  transition: opacity 0.22s ease;
 }
 
 .projects-card h3 {
+  margin-top: 0.55rem;
   color: #111111;
   font-size: clamp(1.08rem, 1.05vw, 1.3rem);
   font-weight: 500;
@@ -1123,6 +1154,16 @@ a {
   color: rgba(17, 17, 17, 0.42);
   font-size: clamp(0.95rem, 0.92vw, 1.16rem);
   line-height: 1.08;
+}
+
+.projects-card--telefonica h3 {
+  font-size: clamp(0.9rem, 0.88vw, 1.1rem);
+  line-height: 1;
+}
+
+.projects-card:hover h3,
+.projects-card:hover p {
+  opacity: 0;
 }
 
 .projects-page-footer {
@@ -1379,6 +1420,13 @@ a {
   place-items: center;
 }
 
+.academy-page-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+
 .shop-page {
   position: relative;
   min-height: calc(100vh - 3rem);
@@ -1420,7 +1468,21 @@ a {
   white-space: nowrap;
 }
 
+.academy-page-message {
+  color: #111111;
+  font-family: var(--font-condensed);
+  font-size: clamp(4.2rem, 8vw, 6.2rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .shop-page .projects-page-footer {
+  padding-top: 1.2rem;
+}
+
+.academy-page .projects-page-footer {
   padding-top: 1.2rem;
 }
 
@@ -1497,7 +1559,38 @@ a {
     gap: 2.4rem 1.25rem;
   }
 
+  .projects-card {
+    aspect-ratio: auto;
+    overflow: visible;
+  }
+
+  .projects-card-content {
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    grid-template-rows: auto auto auto;
+  }
+
+  .projects-card-media {
+    aspect-ratio: 1 / 0.72;
+  }
+
+  .projects-card h3 {
+    margin-top: 0.38rem;
+    font-size: clamp(0.9rem, 4vw, 1.08rem);
+    overflow-wrap: anywhere;
+  }
+
+  .projects-card p {
+    font-size: clamp(0.78rem, 3.5vw, 0.95rem);
+    overflow-wrap: anywhere;
+  }
+
   .shop-page-message {
+    font-size: clamp(2.8rem, 13vw, 4rem);
+  }
+
+  .academy-page-message {
     font-size: clamp(2.8rem, 13vw, 4rem);
   }
 }

@@ -3,6 +3,7 @@ const navItems = [
   { id: 'studio', label: 'ESTUDIO' },
   { id: 'contact', label: 'CONTACTO' },
   { id: 'shop', label: 'TIENDA ONLINE' },
+  { id: 'academy', label: 'ACADEMIA' },
 ]
 
 export default function PageHeader({

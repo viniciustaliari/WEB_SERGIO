@@ -6,7 +6,7 @@ const primaryItems = [
   { label: '3. ESCENOGRAFÍA', pageId: 'projects', filterId: 'scenography' },
   { label: '4. DISEÑO GRÁFICO', pageId: 'projects', filterId: 'graphic' },
   { label: '5. DIRECCIÓN DE ARTE', pageId: 'projects', filterId: 'art-direction' },
-  { label: '6. ACADEMIA', pageId: 'projects', filterId: 'academy' },
+  { label: '6. ACADEMIA', pageId: 'academy' },
   { label: 'TIENDA ONLINE', pageId: 'shop' },
 ]
 

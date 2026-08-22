@@ -29,7 +29,7 @@ export default function SceneArtboard({
         className="scene-background absolute inset-0 h-full w-full object-fill"
       />
 
-      <div className="pointer-events-none absolute inset-0 z-[60]">
+      <div className="pointer-events-none absolute inset-0 z-[110]">
         <SceneMenu onNavigate={onNavigate} />
       </div>
 
@@ -58,7 +58,7 @@ export default function SceneArtboard({
         </div>
       ) : null}
 
-      <div className="pointer-events-none absolute inset-0 z-[59]">
+      <div className="scene-hotspots-layer absolute inset-0">
         {hotspots.map((hotspot) => (
           <SceneHotspot key={hotspot.id} {...hotspot} />
         ))}

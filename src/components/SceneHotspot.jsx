@@ -8,11 +8,11 @@ export default function SceneHotspot({
   regions,
 }) {
   return (
-    <div className="scene-hotspot pointer-events-none absolute inset-0">
+    <div className="scene-hotspot absolute inset-0">
       {regions.map((region, index) => (
         <div
           key={`${label}-${index}`}
-          className={`scene-hotspot-region pointer-events-auto${isVisible ? ' scene-hotspot-region--visible' : ''}`}
+          className={`scene-hotspot-region${isVisible ? ' scene-hotspot-region--visible' : ''}`}
           onClick={onClick}
           onPointerEnter={onPointerEnter}
           onPointerLeave={onPointerLeave}

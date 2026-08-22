@@ -1,6 +1,5 @@
 const projectFilters = [
   { id: 'all', label: 'TODOS' },
-  { id: 'academy', label: 'ACADEMIA' },
   { id: 'interiors', label: 'DISEÑO DE INTERIORES' },
   { id: 'landscape', label: 'PAISAJISMO' },
   { id: 'scenography', label: 'ESCENOGRAFÍA' },
