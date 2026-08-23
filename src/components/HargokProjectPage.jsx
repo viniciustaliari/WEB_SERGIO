@@ -1,69 +1,8 @@
-import { useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
 
-const projectParagraphs = [
-  'Diseño de dos tipografías sans serif de creación propia, desarrolladas en colaboración con otro diseñador a partir de una idea común: reducir la letra a su mínima expresión sin perder su identidad. Inspiradas en la síntesis del cuerpo humano, ambas propuestas trabajan con líneas rectas, diagonales y formas geométricas que eliminan lo accesorio para quedarse únicamente con lo esencial.',
-  'Más que tipografías convencionales, el proyecto funciona como un ejercicio de percepción visual. Algunas letras se completan en la mente del lector, generando un equilibrio entre orden y ausencia, estructura e intuición. Las composiciones tipográficas exploran esa tensión entre lo legible y lo abstracto, convirtiendo la letra en imagen y haciendo que el diseño no solo se lea, sino que también se interprete.',
-]
+const copy = { es: { title: 'Tipograf\u00eda Hargok', location: 'Madrid, Espa\u00f1a', details: 'DATOS PROYECTO', paragraphs: ['Dise\u00f1o de dos tipograf\u00edas sans serif de creaci\u00f3n propia, desarrolladas en colaboraci\u00f3n con otro dise\u00f1ador a partir de una idea com\u00fan: reducir la letra a su m\u00ednima expresi\u00f3n sin perder su identidad. Inspiradas en la s\u00edntesis del cuerpo humano, ambas propuestas trabajan con l\u00edneas rectas, diagonales y formas geom\u00e9tricas que eliminan lo accesorio para quedarse \u00fanicamente con lo esencial.', 'M\u00e1s que tipograf\u00edas convencionales, el proyecto funciona como un ejercicio de percepci\u00f3n visual. Algunas letras se completan en la mente del lector, generando un equilibrio entre orden y ausencia, estructura e intuici\u00f3n. Las composiciones tipogr\u00e1ficas exploran esa tensi\u00f3n entre lo legible y lo abstracto, convirtiendo la letra en imagen y haciendo que el dise\u00f1o no solo se lea, sino que tambi\u00e9n se interprete.'], facts: [['Fecha', '2021'], ['Estado', 'Proyecto'], ['Equipo', 'Sergio de Isidro + Javier M\u00aa Alonso']] }, en: { title: 'Hargok typeface', location: 'Madrid, Spain', details: 'PROJECT DETAILS', paragraphs: ['Design of two original sans-serif typefaces, developed in collaboration with another designer from a shared idea: reducing the letter to its most minimal expression without losing its identity. Inspired by the synthesis of the human body, both proposals use straight lines, diagonals and geometric forms to remove the superfluous and retain only the essential.', 'More than conventional typefaces, the project works as an exercise in visual perception. Some letters are completed in the reader\'s mind, creating a balance between order and absence, structure and intuition. The typographic compositions explore that tension between the legible and the abstract, turning the letter into an image and making design something to interpret as well as read.'], facts: [['Date', '2021'], ['Status', 'Project'], ['Team', 'Sergio de Isidro + Javier M. Alonso']] } }
 
-const projectFacts = [
-  { label: 'Fecha', value: '2021' },
-  { label: 'Estado', value: 'Proyecto' },
-  { label: 'Equipo', value: 'Sergio de Isidro + Javier Mª Alonso' },
-]
-
-export default function HargokProjectPage({ onBack, onNavigate }) {
-  const [isSpanish, setIsSpanish] = useState(false)
-
-  return (
-    <section className="projects-page project-detail-page">
-      <PageHeader
-        activePage="projects"
-        isSpanish={isSpanish}
-        onBack={onBack}
-        onNavigate={onNavigate}
-        onSetSpanish={setIsSpanish}
-      />
-
-      <ProjectsFilterBar activeFilter="graphic" />
-
-      <div className="project-detail-layout">
-        <div className="project-detail-visual">
-          <img
-            className="project-detail-image"
-            src="/pages/proyectos/hagok.svg"
-            alt="Panel del proyecto Tipografía Hargok"
-          />
-        </div>
-
-        <aside className="project-detail-sidebar">
-          <h1>Tipografía Hargok</h1>
-          <p className="project-detail-location">Madrid, España</p>
-
-          <div className="project-detail-copy">
-            {projectParagraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-
-          <div className="project-detail-meta">
-            <h2>DATOS PROYECTO</h2>
-
-            <div className="project-detail-facts">
-              {projectFacts.map((fact) => (
-                <div key={fact.label} className="project-detail-fact">
-                  <p className="project-detail-fact-label">{fact.label}</p>
-                  <p className="project-detail-fact-value">{fact.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <PageFooter />
-    </section>
-  )
-}
+export default function HargokProjectPage({ onBack, onNavigate }) { const { language } = useLanguage(); const content = copy[language]; return <section className="projects-page project-detail-page"><PageHeader activePage="projects" onBack={onBack} onNavigate={onNavigate} /><ProjectsFilterBar activeFilter="graphic" /><div className="project-detail-layout"><div className="project-detail-visual"><img className="project-detail-image" src="/pages/proyectos/hagok.svg" alt={content.title} /></div><aside className="project-detail-sidebar"><h1>{content.title}</h1><p className="project-detail-location">{content.location}</p><div className="project-detail-copy">{content.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div><div className="project-detail-meta"><h2>{content.details}</h2><div className="project-detail-facts">{content.facts.map(([label, value]) => <div key={label} className="project-detail-fact"><p className="project-detail-fact-label">{label}</p><p className="project-detail-fact-value">{value}</p></div>)}</div></div></aside></div><PageFooter /></section> }

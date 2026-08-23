@@ -1,74 +1,8 @@
-import { useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
 
-const projectParagraphs = [
-  'Cartel seleccionado por la Universidad Francisco de Vitoria como imagen oficial de la representación de Los intereses creados de Jacinto Benavente. El proyecto parte de una reinterpretación visual de la obra, utilizando las manos y los hilos como símbolo de la manipulación, las apariencias y los vínculos invisibles que mueven a los personajes.',
-  'La mezcla de dibujo gestual y acuarela busca alejarse del cartel teatral tradicional y aportar una lectura más contemporánea, emocional y directa. Una pieza pensada no solo para anunciar una función, sino para despertar curiosidad antes de que se abra el telón.',
-]
+const copy = { es: { title: 'Cartel de teatro', location: 'Madrid, Espa\u00f1a', details: 'DATOS PROYECTO', paragraphs: ['Cartel seleccionado por la Universidad Francisco de Vitoria como imagen oficial de la representaci\u00f3n de Los intereses creados de Jacinto Benavente. El proyecto parte de una reinterpretaci\u00f3n visual de la obra, utilizando las manos y los hilos como s\u00edmbolo de la manipulaci\u00f3n, las apariencias y los v\u00ednculos invisibles que mueven a los personajes.', 'La mezcla de dibujo gestual y acuarela busca alejarse del cartel teatral tradicional y aportar una lectura m\u00e1s contempor\u00e1nea, emocional y directa. Una pieza pensada no solo para anunciar una funci\u00f3n, sino para despertar curiosidad antes de que se abra el tel\u00f3n.'], facts: [['Fecha', '2023'], ['Estado', 'Realizado'], ['Equipo', 'Sergio de Isidro'], ['Premios', 'Cartel seleccionado como propuesta ganadora del concurso de carteler\u00eda de la UFV para representar su obra teatral.']] }, en: { title: 'Theatre poster', location: 'Madrid, Spain', details: 'PROJECT DETAILS', paragraphs: ['Poster selected by Universidad Francisco de Vitoria as the official image for the staging of Los intereses creados by Jacinto Benavente. The project offers a visual reinterpretation of the play, using hands and threads as symbols of manipulation, appearances and the invisible ties that move its characters.', 'The combination of gestural drawing and watercolour moves away from the traditional theatre poster to offer a more contemporary, emotional and direct reading. It is a piece designed not only to announce a performance, but to spark curiosity before the curtain rises.'], facts: [['Date', '2023'], ['Status', 'Completed'], ['Team', 'Sergio de Isidro'], ['Awards', 'Poster selected as the winning proposal in the UFV poster competition to represent its theatre production.']] } }
 
-const projectFacts = [
-  { label: 'Fecha', value: '2023' },
-  { label: 'Estado', value: 'Realizado' },
-  { label: 'Equipo', value: 'Sergio de Isidro' },
-  {
-    label: 'Premios',
-    value:
-      'Cartel seleccionado como propuesta ganadora del concurso de cartelería de la UFV para representar su obra teatral.',
-  },
-]
-
-export default function CartelTeatroProjectPage({ onBack, onNavigate }) {
-  const [isSpanish, setIsSpanish] = useState(false)
-
-  return (
-    <section className="projects-page project-detail-page">
-      <PageHeader
-        activePage="projects"
-        isSpanish={isSpanish}
-        onBack={onBack}
-        onNavigate={onNavigate}
-        onSetSpanish={setIsSpanish}
-      />
-
-      <ProjectsFilterBar activeFilter="graphic" />
-
-      <div className="project-detail-layout">
-        <div className="project-detail-visual">
-          <img
-            className="project-detail-image"
-            src="/pages/proyectos/cartel_de_teatro.svg"
-            alt="Panel del proyecto Cartel de teatro"
-          />
-        </div>
-
-        <aside className="project-detail-sidebar">
-          <h1>Cartel de teatro</h1>
-          <p className="project-detail-location">Madrid, España</p>
-
-          <div className="project-detail-copy">
-            {projectParagraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-
-          <div className="project-detail-meta">
-            <h2>DATOS PROYECTO</h2>
-
-            <div className="project-detail-facts">
-              {projectFacts.map((fact) => (
-                <div key={fact.label} className="project-detail-fact">
-                  <p className="project-detail-fact-label">{fact.label}</p>
-                  <p className="project-detail-fact-value">{fact.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <PageFooter />
-    </section>
-  )
-}
+export default function CartelTeatroProjectPage({ onBack, onNavigate }) { const { language } = useLanguage(); const content = copy[language]; return <section className="projects-page project-detail-page"><PageHeader activePage="projects" onBack={onBack} onNavigate={onNavigate} /><ProjectsFilterBar activeFilter="graphic" /><div className="project-detail-layout"><div className="project-detail-visual"><img className="project-detail-image" src="/pages/proyectos/cartel_de_teatro.svg" alt={content.title} /></div><aside className="project-detail-sidebar"><h1>{content.title}</h1><p className="project-detail-location">{content.location}</p><div className="project-detail-copy">{content.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div><div className="project-detail-meta"><h2>{content.details}</h2><div className="project-detail-facts">{content.facts.map(([label, value]) => <div key={label} className="project-detail-fact"><p className="project-detail-fact-label">{label}</p><p className="project-detail-fact-value">{value}</p></div>)}</div></div></aside></div><PageFooter /></section> }

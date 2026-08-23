@@ -167,6 +167,7 @@ export default function App() {
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [activePage, setActivePage] = useState('home')
   const [projectsFilter, setProjectsFilter] = useState('all')
+  const [projectsSearch, setProjectsSearch] = useState('')
   const [isBusinessCardOpen, setIsBusinessCardOpen] = useState(false)
   const [hasOpenedBusinessCard, setHasOpenedBusinessCard] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(true)
@@ -267,6 +268,7 @@ export default function App() {
 
       if (nextSection.pageId === 'projects') {
         setProjectsFilter(nextSection.filterId ?? 'all')
+        setProjectsSearch(nextSection.searchQuery ?? '')
       }
 
       return
@@ -276,6 +278,7 @@ export default function App() {
 
     if (nextSection === 'projects') {
       setProjectsFilter('all')
+      setProjectsSearch('')
     }
   }
 
@@ -1861,6 +1864,7 @@ export default function App() {
         <ProjectsPage
           activePage={activePage}
           initialFilter={projectsFilter}
+          initialSearch={projectsSearch}
           onBack={() => setActivePage('home')}
           onNavigate={handleNavigate}
           onOpenProject={(projectId) => {

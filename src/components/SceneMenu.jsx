@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
 
 const primaryItems = [
   { label: '1. DISEÑO DE INTERIORES', pageId: 'projects', filterId: 'interiors' },
@@ -15,9 +16,16 @@ const secondaryItems = [
   { label: 'ESTUDIO', pageId: 'studio' },
 ]
 
+const menuTranslations = {
+  es: ['1. DISE\u00d1O DE INTERIORES', '2. PAISAJISMO', '3. ESCENOGRAF\u00cdA', '4. DISE\u00d1O GR\u00c1FICO', '5. DIRECCI\u00d3N DE ARTE', '6. ACADEMIA', 'TIENDA ONLINE', 'CONTACTO', 'ESTUDIO'],
+  en: ['1. INTERIOR DESIGN', '2. LANDSCAPE DESIGN', '3. SCENOGRAPHY', '4. GRAPHIC DESIGN', '5. ART DIRECTION', '6. ACADEMY', 'ONLINE SHOP', 'CONTACT', 'STUDIO'],
+}
+
 export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled = false }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [isSpanish, setIsSpanish] = useState(false)
+  const { language, setLanguage } = useLanguage()
+  const isSpanish = language === 'es'
+  const labels = menuTranslations[language]
 
   const handleNavigate = (item) => {
     if (!item.pageId) return
@@ -57,27 +65,27 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
           </button>
 
           <div className="scene-menu-group scene-menu-group-primary">
-            {primaryItems.map((item) => (
+            {primaryItems.map((item, index) => (
               <button
                 key={item.label}
                 type="button"
                 className="scene-menu-item"
                 onClick={() => handleNavigate(item)}
               >
-                <span>{item.label}</span>
+                <span>{labels[index]}</span>
               </button>
             ))}
           </div>
 
           <div className="scene-menu-group scene-menu-group-secondary">
-            {secondaryItems.map((item) => (
+            {secondaryItems.map((item, index) => (
               <button
                 key={item.label}
                 type="button"
                 className="scene-menu-item"
                 onClick={() => handleNavigate(item)}
               >
-                <span>{item.label}</span>
+                <span>{labels[index + primaryItems.length]}</span>
               </button>
             ))}
 
@@ -128,7 +136,7 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
                   type="button"
                   className={`scene-menu-switch-option${!isSpanish ? ' is-active' : ''}`}
                   aria-pressed={!isSpanish}
-                  onClick={() => setIsSpanish(false)}
+                  onClick={() => setLanguage('en')}
                 >
                   EN
                 </button>
@@ -137,7 +145,7 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
                   type="button"
                   className={`scene-menu-switch-option${isSpanish ? ' is-active' : ''}`}
                   aria-pressed={isSpanish}
-                  onClick={() => setIsSpanish(true)}
+                  onClick={() => setLanguage('es')}
                 >
                   ES
                 </button>

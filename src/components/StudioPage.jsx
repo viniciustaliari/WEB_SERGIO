@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 
@@ -21,16 +22,21 @@ const studioGroups = [
 ]
 
 export default function StudioPage({ activePage, onBack, onNavigate }) {
-  const [isSpanish, setIsSpanish] = useState(false)
+  const { language } = useLanguage()
+  const studioCopy = language === 'es' ? studioGroups : [
+    ['It all started here, in a flat on Camarena 228, where a father taught his son everything he knew. From a very early age, he learned that every problem had a solution, and that if one did not exist, it was simply because nobody had been brave or creative enough to invent it.'],
+    ['They taught him to think differently, to look for radical solutions where others only saw the impossible, and to enjoy the process. As a child he spent hours helping his father and grandfather build anything at all, learning with his hands and using his small size to get where they could not. That is how he decided that he would grow up to be an "architectologist", as he called it.'],
+    ['Over time, they fell in love with design, and father and son both went on to study Interior Architecture at ETSAM. Without doubt, it was one of the best decisions of their lives: a completely new world opened up before them.'],
+    ['They may not have been the best, but they stood out. Where others saw problems, they saw possibilities. Each project was a challenge, almost a game: a new opportunity to solve something in a rebellious, creative and useful way.'],
+    ['In time, that shared journey led them to found a studio together. Two different perspectives which, rather than clashing, complement each other perfectly and find unique solutions in that union.'],
+  ]
 
   return (
     <section className="projects-page studio-page">
       <PageHeader
         activePage={activePage}
-        isSpanish={isSpanish}
         onBack={onBack}
         onNavigate={onNavigate}
-        onSetSpanish={setIsSpanish}
       />
 
       <div className="contact-page-content studio-page-content">
@@ -45,7 +51,7 @@ export default function StudioPage({ activePage, onBack, onNavigate }) {
           <h1>Estudio 2 28</h1>
 
           <div className="contact-page-groups studio-page-groups">
-            {studioGroups.map((group, index) => (
+            {studioCopy.map((group, index) => (
               <div key={index} className="contact-page-group studio-page-group">
                 {group.map((line) => (
                   <p key={line}>{line}</p>

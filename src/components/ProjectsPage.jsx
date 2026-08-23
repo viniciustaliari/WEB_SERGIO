@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
@@ -30,6 +31,14 @@ const projectItems = [
   { id: 'efimero', title: 'Stand efímero de venta', location: 'Madrid, España', category: 'scenography', iconSrc: '/proyectos/iconos/efimero.png', imageSrc: '/proyectos/imagenes/efimero.png' },
   { id: 'nave-16', title: 'Residencia artística en Nave 16', location: 'Madrid, España', category: 'interiors', iconSrc: '/proyectos/iconos/nave_16.png', imageSrc: '/proyectos/imagenes/nave_16.png' },
 ]
+
+const englishProjectTitles = {
+  'el-circulo': 'The Circle construction toy', 'cartel-teatro': 'Theatre poster', 'el-rastro': 'El Rastro corporate identity', hargok: 'Hargok typeface', haz: 'HAZ lamp', podcast: 'Podcast corporate identity', eneo: 'Eneo corporate identity', 'fiestas-locales': 'Local festivities poster', packaging: 'Editorial design and packaging', ilustraciones: 'Illustration collection', cross: 'CROSS chair', ufv: 'UFV scenography', playground: 'Experimental housing and playground', capilla: 'Chapel design and lighting', pg: 'PG corporate identity', boat: 'Boat sculpture', telefonica: 'Office project in the Telef\u00f3nica building', miteco: 'MITECO landscaping project', 'el-bosque': 'El Bosque cultural centre', 'album-musical': 'Art direction for a music album', 'espacio-expositivo': 'Temporary exhibition space 2021', 'v-karting': 'V.Karting logo and livery design', soldrink: 'Winery branding and labels', efimero: 'Ephemeral sales stand', 'nave-16': 'Artists\' residency at Nave 16',
+}
+
+function englishLocation(location) {
+  return location.replace(/Espa\u00f1a|EspaÃ±a/g, 'Spain')
+}
 
 function ProjectCard({
   projectId,
@@ -65,10 +74,12 @@ function ProjectCard({
 export default function ProjectsPage({
   activePage,
   initialFilter = 'all',
+  initialSearch = '',
   onBack,
   onNavigate,
   onOpenProject,
 }) {
+  const { language } = useLanguage()
   const [isSpanish, setIsSpanish] = useState(false)
   const [activeFilter, setActiveFilter] = useState(initialFilter)
 
@@ -77,9 +88,9 @@ export default function ProjectsPage({
   }, [initialFilter])
 
   const filteredProjects = useMemo(() => {
-    if (activeFilter === 'all') return projectItems
-    return projectItems.filter((project) => project.category === activeFilter)
-  }, [activeFilter])
+    const query = initialSearch.trim().toLocaleLowerCase()
+    return projectItems.filter((project) => (activeFilter === 'all' || project.category === activeFilter) && (!query || `${project.title} ${project.location} ${englishProjectTitles[project.id] ?? ''}`.toLocaleLowerCase().includes(query)))
+  }, [activeFilter, initialSearch])
 
   return (
     <section className="projects-page">
@@ -101,8 +112,8 @@ export default function ProjectsPage({
           <ProjectCard
             key={project.title}
             projectId={project.id}
-            title={project.title}
-            location={project.location}
+            title={language === 'en' ? (englishProjectTitles[project.id] ?? project.title) : project.title}
+            location={language === 'en' ? englishLocation(project.location) : project.location}
             category={project.category}
             iconSrc={project.iconSrc}
             imageSrc={project.imageSrc}

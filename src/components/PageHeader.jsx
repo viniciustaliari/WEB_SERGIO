@@ -1,18 +1,48 @@
-const navItems = [
-  { id: 'projects', label: 'PROYECTOS' },
-  { id: 'studio', label: 'ESTUDIO' },
-  { id: 'contact', label: 'CONTACTO' },
-  { id: 'shop', label: 'TIENDA ONLINE' },
-  { id: 'academy', label: 'ACADEMIA' },
-]
+import { useState } from 'react'
+import { useLanguage } from '../context/LanguageContext'
+
+const navItems = {
+  es: [
+    { id: 'projects', label: 'PROYECTOS' },
+    { id: 'studio', label: 'ESTUDIO' },
+    { id: 'contact', label: 'CONTACTO' },
+    { id: 'shop', label: 'TIENDA ONLINE' },
+    { id: 'academy', label: 'ACADEMIA' },
+  ],
+  en: [
+    { id: 'projects', label: 'PROJECTS' },
+    { id: 'studio', label: 'STUDIO' },
+    { id: 'contact', label: 'CONTACT' },
+    { id: 'shop', label: 'ONLINE SHOP' },
+    { id: 'academy', label: 'ACADEMY' },
+  ],
+}
 
 export default function PageHeader({
   activePage,
-  isSpanish,
   onBack,
   onNavigate,
-  onSetSpanish,
 }) {
+  const { language, setLanguage } = useLanguage()
+  const isSpanish = language === 'es'
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const submitSearch = (event) => {
+    event.preventDefault()
+    onNavigate?.({ pageId: 'projects', searchQuery })
+    setIsSearchOpen(false)
+  }
+
+  const handleSearchChange = (event) => {
+    const nextQuery = event.target.value
+    setSearchQuery(nextQuery)
+
+    if (activePage === 'projects') {
+      onNavigate?.({ pageId: 'projects', searchQuery: nextQuery })
+    }
+  }
+
   return (
     <header className="projects-page-header">
       <button type="button" className="projects-page-brand" onClick={onBack}>
@@ -21,7 +51,7 @@ export default function PageHeader({
 
       <div className="projects-page-nav-row">
         <nav className="projects-page-nav" aria-label="Secciones principales">
-          {navItems.map((item) => (
+          {navItems[language].map((item) => (
             <button
               key={item.id}
               type="button"
@@ -33,12 +63,15 @@ export default function PageHeader({
           ))}
         </nav>
 
-        <div className="projects-page-lang-switch" role="group" aria-label="Idioma">
+        <div className="projects-page-header-tools">
+          {isSearchOpen ? <form className="projects-page-search" onSubmit={submitSearch}><input autoFocus value={searchQuery} onChange={handleSearchChange} placeholder={language === 'es' ? 'Buscar proyectos' : 'Search projects'} /><button type="submit">OK</button></form> : null}
+          <button type="button" className="projects-page-search-button" aria-label={language === 'es' ? 'Buscar proyectos' : 'Search projects'} onClick={() => setIsSearchOpen((open) => !open)}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button>
+          <div className="projects-page-lang-switch" role="group" aria-label="Idioma">
           <button
             type="button"
             className={`projects-page-lang${!isSpanish ? ' is-active' : ''}`}
             aria-pressed={!isSpanish}
-            onClick={() => onSetSpanish(false)}
+            onClick={() => setLanguage('en')}
           >
             EN
           </button>
@@ -47,10 +80,11 @@ export default function PageHeader({
             type="button"
             className={`projects-page-lang${isSpanish ? ' is-active' : ''}`}
             aria-pressed={isSpanish}
-            onClick={() => onSetSpanish(true)}
+            onClick={() => setLanguage('es')}
           >
             ES
           </button>
+        </div>
         </div>
       </div>
     </header>

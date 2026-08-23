@@ -1103,6 +1103,13 @@ a {
   white-space: nowrap;
 }
 
+.projects-page-header-tools { display: inline-flex; align-items: center; gap: 0.7rem; }
+.projects-page-search-button { display: grid; width: 1.15rem; height: 1.15rem; padding: 0; border: 0; background: transparent; color: #111; cursor: pointer; }
+.projects-page-search-button svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.projects-page-search { display: inline-flex; align-items: center; gap: 0.3rem; }
+.projects-page-search input { width: 10rem; border: 0; border-bottom: 1px solid #111; padding: 0.1rem; background: transparent; color: #111; font-family: var(--font-condensed); font-size: 1rem; outline: none; }
+.projects-page-search button { border: 0; background: transparent; color: #111; font-family: var(--font-condensed); cursor: pointer; }
+
 .projects-page-lang {
   font-size: clamp(0.95rem, 1vw, 1.1rem);
 }
