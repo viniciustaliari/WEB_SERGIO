@@ -11,7 +11,7 @@ export default function SceneHotspot({
     <div className="scene-hotspot absolute inset-0">
       {regions.map((region, index) => (
         <div
-          key={`${label}-${index}`}
+          key={`${label ?? 'hotspot'}-${index}`}
           className={`scene-hotspot-region${isVisible ? ' scene-hotspot-region--visible' : ''}`}
           onClick={onClick}
           onPointerEnter={onPointerEnter}
@@ -19,9 +19,11 @@ export default function SceneHotspot({
           style={region}
         />
       ))}
-      <div className="scene-hotspot-dialogue" style={dialogueStyle}>
-        {label}
-      </div>
+      {label ? (
+        <div className="scene-hotspot-dialogue" style={dialogueStyle}>
+          {label}
+        </div>
+      ) : null}
     </div>
   )
 }

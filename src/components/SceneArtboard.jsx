@@ -4,16 +4,20 @@ import SceneMenu from './SceneMenu'
 
 export default function SceneArtboard({
   backgroundSrc,
+  businessCardOpen = false,
   bird,
   cartela,
   house,
   onNavigate,
   onBackgroundLoad,
+  onCloseBusinessCard,
   overlayCharacters,
+  onSetSoundEnabled,
   hotspots = [],
   superTopCharacters = [],
   topCharacters = [],
   sceneStyle,
+  soundEnabled,
   van,
 }) {
   return (
@@ -30,7 +34,11 @@ export default function SceneArtboard({
       />
 
       <div className="pointer-events-none absolute inset-0 z-[110]">
-        <SceneMenu onNavigate={onNavigate} />
+        <SceneMenu
+          onNavigate={onNavigate}
+          soundEnabled={soundEnabled}
+          onSetSoundEnabled={onSetSoundEnabled}
+        />
       </div>
 
       <div className="scene-character-layer pointer-events-none absolute inset-0 z-30 overflow-hidden">
@@ -90,6 +98,25 @@ export default function SceneArtboard({
           </div>
         </div>
       </div>
+
+      {businessCardOpen ? (
+        <div
+          className="scene-business-card-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Tarjeta de visita de Estudio 2 28"
+        >
+          <button
+            type="button"
+            className="scene-business-card-backdrop"
+            aria-label="Cerrar tarjeta de visita"
+            onClick={onCloseBusinessCard}
+          />
+          <div className="scene-business-card-content">
+            <img src="/tarjeta_visita.svg" alt="Tarjeta de visita de Estudio 2 28" />
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

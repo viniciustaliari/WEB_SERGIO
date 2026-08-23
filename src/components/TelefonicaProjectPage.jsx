@@ -4,9 +4,9 @@ import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
 
 const projectParagraphs = [
-  'Este proyecto est\u00e1 basado en el concepto del Metabolismo japon\u00e9s de Kisho Kurokawa (la arquitectura como organismo vivo, formado por c\u00e1psulas independientes que se pueden montar, sustituir o combinar sin depender de una estructura fija) y en las utop\u00edas de Archigram, como la Plug-in City, donde el edificio deja de ser un bloque cerrado para convertirse en un sistema de piezas intercambiables donde los trabajadores puedan interactuar de una forma m\u00e1s libre.',
-  'De ah\u00ed surge la idea de los cubos flotantes: en vez de una oficina pesada y compacta, se propone un conjunto de m\u00f3dulos ligeros que parecen desprenderse del edificio y flotar sobre una plataforma elevada, dejando que el aire, la vegetaci\u00f3n y la luz entren entre ellos.',
-  'Con esto se busca romper con la oficina tradicional, cerrada y monol\u00edtica, y proponer un espacio de trabajo m\u00e1s flexible, ligero y permeable con su entorno.',
+  'Este proyecto está basado en el concepto del Metabolismo japonés de Kisho Kurokawa (la arquitectura como organismo vivo, formado por cápsulas independientes que se pueden montar, sustituir o combinar sin depender de una estructura fija) y en las utopías de Archigram, como la Plug-in City, donde el edificio deja de ser un bloque cerrado para convertirse en un sistema de piezas intercambiables donde los trabajadores puedan interactuar de una forma más libre.',
+  'De ahí surge la idea de los cubos flotantes: en vez de una oficina pesada y compacta, se propone un conjunto de módulos ligeros que parecen desprenderse del edificio y flotar sobre una plataforma elevada, dejando que el aire, la vegetación y la luz entren entre ellos.',
+  'Con esto se busca romper con la oficina tradicional, cerrada y monolítica, y proponer un espacio de trabajo más flexible, ligero y permeable con su entorno.',
 ]
 
 const projectFacts = [
@@ -37,12 +37,12 @@ export default function TelefonicaProjectPage({ onBack, onNavigate }) {
           <img
             className="project-detail-image"
             src="/pages/proyectos/telefonica.png"
-            alt="Panel del proyecto Oficinas en Edificio Telef\u00f3nica"
+            alt="Panel del proyecto Oficinas en Edificio Telefónica"
           />
         </div>
 
         <aside className="project-detail-sidebar">
-          <h1>Oficinas en Edificio Telef\u00f3nica</h1>
+          <h1>Oficinas en Edificio Telefónica</h1>
           <p className="project-detail-location">Madrid, España</p>
 
           <div className="project-detail-copy">

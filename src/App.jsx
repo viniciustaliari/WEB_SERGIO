@@ -1,12 +1,36 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import AcademyPage from './components/AcademyPage'
+import AlbumMusicalProjectPage from './components/AlbumMusicalProjectPage'
+import BoatProjectPage from './components/BoatProjectPage'
+import VKartingProjectPage from './components/VKartingProjectPage'
+import CapillaProjectPage from './components/CapillaProjectPage'
+import CartelTeatroProjectPage from './components/CartelTeatroProjectPage'
 import ContactPage from './components/ContactPage'
+import CrossProjectPage from './components/CrossProjectPage'
+import ElBosqueProjectPage from './components/ElBosqueProjectPage'
+import EfimeroProjectPage from './components/EfimeroProjectPage'
+import ElCirculoProjectPage from './components/ElCirculoProjectPage'
+import ElRastroProjectPage from './components/ElRastroProjectPage'
+import EneoProjectPage from './components/EneoProjectPage'
+import EspacioExpositivoProjectPage from './components/EspacioExpositivoProjectPage'
+import FiestasLocalesProjectPage from './components/FiestasLocalesProjectPage'
+import HargokProjectPage from './components/HargokProjectPage'
+import HazProjectPage from './components/HazProjectPage'
+import IlustracionesProjectPage from './components/IlustracionesProjectPage'
+import MitecoProjectPage from './components/MitecoProjectPage'
+import Nave16ProjectPage from './components/Nave16ProjectPage'
+import PlaygroundProjectPage from './components/PlaygroundProjectPage'
+import PodcastProjectPage from './components/PodcastProjectPage'
+import PackagingProjectPage from './components/PackagingProjectPage'
+import PgProjectPage from './components/PgProjectPage'
 import ProjectsPage from './components/ProjectsPage'
 import SceneArtboard from './components/SceneArtboard'
 import ShopPage from './components/ShopPage'
+import SoldrinkProjectPage from './components/SoldrinkProjectPage'
 import TelefonicaProjectPage from './components/TelefonicaProjectPage'
 import StudioPage from './components/StudioPage'
+import UfvProjectPage from './components/UfvProjectPage'
 import {
   arbolFrames,
   banquitoFrames,
@@ -82,6 +106,7 @@ function getRandomReversePause() {
 function createRandomPausedFrameTween({
   frameDuration,
   onUpdate,
+  pauseDuration,
   state,
   totalFrames,
 }) {
@@ -96,7 +121,7 @@ function createRandomPausedFrameTween({
       ease: frameEase,
       onUpdate,
     })
-    .to({}, { duration: () => getRandomReversePause() })
+    .to({}, { duration: pauseDuration ?? (() => getRandomReversePause()) })
     .to(state, {
       frame: 0,
       duration: frameDuration,
@@ -113,6 +138,7 @@ const staticSceneAssets = [
   '/Frames/imoviles/personajes_fiesta/Fiesta.png',
   '/Frames/imoviles/personaje_microfono/personaje.png',
   '/Frames/imoviles/spray/spray.png',
+  '/Frames/imoviles/cartela/cartela.svg',
 ]
 
 const sceneAssetUrls = [
@@ -141,8 +167,13 @@ export default function App() {
   const [loadingProgress, setLoadingProgress] = useState(0)
   const [activePage, setActivePage] = useState('home')
   const [projectsFilter, setProjectsFilter] = useState('all')
+  const [isBusinessCardOpen, setIsBusinessCardOpen] = useState(false)
+  const [hasOpenedBusinessCard, setHasOpenedBusinessCard] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(true)
   const rootRef = useRef(null)
   const sceneShellRef = useRef(null)
+  const ambientAudioRef = useRef(null)
+  const phoneAudioRef = useRef(null)
 
   const birdRef = useRef(null)
   const birdImageRef = useRef(null)
@@ -153,6 +184,7 @@ export default function App() {
   const vanMoveTweenRef = useRef(null)
   const vanFramesTweenRef = useRef(null)
   const isVanMovingRef = useRef(false)
+  const vanCartelaRef = useRef(null)
 
   const grafitiRef = useRef(null)
   const grafitiImageRef = useRef(null)
@@ -247,6 +279,67 @@ export default function App() {
     }
   }
 
+  const stopPhoneAlert = () => {
+    const phoneAudio = phoneAudioRef.current
+    if (phoneAudio) {
+      phoneAudio.pause()
+      phoneAudio.currentTime = 0
+    }
+
+    telefonoTweenRef.current?.pause(0)
+    telefonoMoveTweenRef.current?.pause(0)
+  }
+
+  const playPhoneAlert = () => {
+    const phoneAudio = phoneAudioRef.current
+    if (hasOpenedBusinessCard || !soundEnabled || !phoneAudio) return
+
+    phoneAudio.currentTime = 0
+    phoneAudio.volume = 0.225
+    phoneAudio.onended = stopPhoneAlert
+    phoneAudio.play().then(() => {
+      telefonoTweenRef.current?.restart()
+      telefonoMoveTweenRef.current?.restart()
+    }).catch(() => {})
+  }
+
+  const handleOpenBusinessCard = () => {
+    stopPhoneAlert()
+    setHasOpenedBusinessCard(true)
+    setIsBusinessCardOpen(true)
+  }
+
+  useEffect(() => {
+    const ambientAudio = ambientAudioRef.current
+    if (!ambientAudio) return
+
+    if (isAssetsReady && activePage === 'home' && soundEnabled) {
+      ambientAudio.volume = 0.18
+      ambientAudio.play().catch(() => {})
+      return
+    }
+
+    ambientAudio.pause()
+    ambientAudio.currentTime = 0
+  }, [activePage, isAssetsReady, soundEnabled])
+
+  useEffect(() => {
+    if (
+      !isAssetsReady ||
+      activePage !== 'home' ||
+      !soundEnabled ||
+      hasOpenedBusinessCard
+    ) {
+      return undefined
+    }
+
+    const phoneInterval = window.setInterval(() => {
+      playPhoneAlert()
+    }, 20_000)
+
+    return () => window.clearInterval(phoneInterval)
+  }, [activePage, hasOpenedBusinessCard, isAssetsReady, soundEnabled])
+
   useEffect(() => {
     if (!isAssetsReady || activePage !== 'home') return
 
@@ -312,14 +405,10 @@ export default function App() {
   }
 
   const handlePhoneZoneEnter = () => {
-    telefonoTweenRef.current?.resume()
-    telefonoMoveTweenRef.current?.resume()
+    stopPhoneAlert()
   }
 
-  const handlePhoneZoneLeave = () => {
-    telefonoTweenRef.current?.pause()
-    telefonoMoveTweenRef.current?.pause()
-  }
+  const handlePhoneZoneLeave = () => {}
 
   const handleDesignZoneEnter = () => {
     bibliotecarioTweenRef.current?.resume()
@@ -392,14 +481,11 @@ export default function App() {
   }
 
   const handleTelefonoEnter = () => {
-    telefonoTweenRef.current?.pause()
-    telefonoMoveTweenRef.current?.pause()
+    stopPhoneAlert()
     showBubble(telefonoBubbleRef)
   }
 
   const handleTelefonoLeave = () => {
-    telefonoTweenRef.current?.resume()
-    telefonoMoveTweenRef.current?.resume()
     hideBubble(telefonoBubbleRef)
   }
 
@@ -602,19 +688,21 @@ export default function App() {
 
         const startVanFrames = () => {
           isVanMovingRef.current = true
+          gsap.set(vanCartelaRef.current, { autoAlpha: 0 })
           vanState.frame = 1
           setAnimatedFrame(vanImageRef, vanFrames, vanState.frame)
           vanFramesTweenRef.current?.restart()
         }
 
-        const stopVanFrames = () => {
+        const stopVanFrames = (atInitialPosition = false) => {
           isVanMovingRef.current = false
           vanFramesTweenRef.current?.pause()
           vanState.frame = 0
           setAnimatedFrame(vanImageRef, vanFrames, vanState.frame)
+          gsap.set(vanCartelaRef.current, { autoAlpha: atInitialPosition ? 1 : 0 })
         }
 
-        stopVanFrames()
+        stopVanFrames(true)
 
         gsap.from(vanRef.current, {
           opacity: 0,
@@ -639,7 +727,7 @@ export default function App() {
             duration: travelDuration,
             ease: 'power1.inOut',
           })
-          .call(stopVanFrames)
+          .call(() => stopVanFrames(true))
       }
 
       if (grafitiRef.current && grafitiImageRef.current) {
@@ -667,6 +755,7 @@ export default function App() {
           },
           state: grafitiState,
           totalFrames,
+          pauseDuration: 1,
         })
         grafitiTweenRef.current.pause()
       }
@@ -758,7 +847,7 @@ export default function App() {
       if (ordenadorRef.current && ordenadorImageRef.current) {
         const ordenadorState = { frame: 0 }
         const totalFrames = ordenadorFrames.length
-        const frameDuration = totalFrames / 3
+        const frameDuration = (totalFrames - 1) / 3
 
         gsap.set(ordenadorRef.current, {
           xPercent: -50,
@@ -775,13 +864,15 @@ export default function App() {
 
         setBubbleInitialState(ordenadorBubbleRef)
 
-        ordenadorTweenRef.current = createRandomPausedFrameTween({
-          frameDuration,
+        ordenadorTweenRef.current = gsap.to(ordenadorState, {
+          frame: totalFrames - 1,
+          duration: frameDuration,
+          ease: `steps(${totalFrames - 1})`,
+          repeat: -1,
+          repeatDelay: 0,
           onUpdate: () => {
             setAnimatedFrame(ordenadorImageRef, ordenadorFrames, ordenadorState.frame)
           },
-          state: ordenadorState,
-          totalFrames,
         })
         ordenadorTweenRef.current.pause()
       }
@@ -818,7 +909,8 @@ export default function App() {
       }
 
         if (sofaRef.current && sofaImageRef.current) {
-          const sofaState = { frame: 0 }
+          const sofaRestFrame = 1 // Frame 2.png
+          const sofaState = { frame: sofaRestFrame }
           const totalFrames = sofaFrames.length
           const frameDuration = totalFrames / 3
           const maxFrame = totalFrames - 1
@@ -848,13 +940,12 @@ export default function App() {
               },
             }, 0)
             .to(sofaRef.current, {
-              left: '44.2%',
+              left: '52%',
               duration: 2.2,
               ease: 'power1.inOut',
             }, 0)
-            .to({}, { duration: sofaPauseDuration })
             .to(sofaState, {
-              frame: 0,
+              frame: sofaRestFrame,
               duration: frameDuration,
               ease: `steps(${maxFrame})`,
               onUpdate: () => {
@@ -866,6 +957,8 @@ export default function App() {
               duration: 2.1,
               ease: 'power1.inOut',
             }, '<')
+            // The sofa rests only after returning to frame 2.png and its origin.
+            .to({}, { duration: sofaPauseDuration })
 
           sofaMoveTweenRef.current = sofaTweenRef.current
           sofaTweenRef.current.pause()
@@ -1007,7 +1100,7 @@ export default function App() {
       if (personasSillasRef.current && personasSillasImageRef.current) {
         const personasSillasState = { frame: 0 }
         const totalFrames = personasSillasFrames.length
-        const frameDuration = totalFrames / 6
+        const frameDuration = (totalFrames - 1) / 6
 
         gsap.set(personasSillasRef.current, {
           xPercent: -50,
@@ -1022,8 +1115,12 @@ export default function App() {
           delay: 0.38,
         })
 
-        personasSillasTweenRef.current = createRandomPausedFrameTween({
-          frameDuration,
+        personasSillasTweenRef.current = gsap.to(personasSillasState, {
+          frame: totalFrames - 1,
+          duration: frameDuration,
+          ease: `steps(${totalFrames - 1})`,
+          repeat: -1,
+          repeatDelay: 0,
           onUpdate: () => {
             setAnimatedFrame(
               personasSillasImageRef,
@@ -1031,8 +1128,6 @@ export default function App() {
               personasSillasState.frame,
             )
           },
-          state: personasSillasState,
-          totalFrames,
         })
         personasSillasTweenRef.current.pause()
       }
@@ -1341,7 +1436,7 @@ export default function App() {
       anchorClassName: 'sofa-anchor',
       imageClassName: 'sofa-frame',
       imageRef: sofaImageRef,
-      src: sofaFrames[0],
+      src: sofaFrames[1],
       alt: 'Sofa animado',
       style: { left: '42%', top: '56.4%', width: '10%' },
     },
@@ -1378,6 +1473,16 @@ export default function App() {
   ]
 
   const topCharacters = [
+    {
+      id: 'cartela-personaje',
+      ref: vanCartelaRef,
+      anchorClassName: 'cartela-personaje-anchor',
+      imageClassName: 'cartela-personaje-frame',
+      src: '/Frames/imoviles/cartela/cartela.svg',
+      alt: 'Cartela junto a la furgo',
+      // Keep this overlay aligned with the van below it.
+      style: { left: '-7%', top: '74%', width: '38%' },
+    },
     {
       id: 'spray',
       anchorClassName: 'spray-anchor',
@@ -1567,11 +1672,12 @@ export default function App() {
     onPointerLeave: handleVanLeave,
     src: vanFrames[0],
     alt: 'Furgo animada',
-    style: { left: '18%', top: '74.1%', width: '24%' },
+    style: { left: '17%', top: '74.1%', width: '24%' },
   }
 
   const birdCharacter = {
     ref: birdRef,
+    className: 'scene-character-hidden',
     anchorClassName: 'bird-anchor',
     imageClassName: 'bird-frame',
     imageRef: birdImageRef,
@@ -1584,9 +1690,9 @@ export default function App() {
   const sceneHotspots = [
     {
       id: '228-estudio',
-      label: '2 28 ESTUDIO',
-      dialogueStyle: { left: '34%', top: '10%' },
-      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'all' }),
+      label: 'DISEÑO GRÁFICO',
+      dialogueStyle: { left: '40.2%', top: '20.5%' },
+      onClick: () => handleNavigate({ pageId: 'projects', filterId: 'graphic' }),
       onPointerEnter: handleStudioZoneEnter,
       onPointerLeave: handleStudioZoneLeave,
       regions: [
@@ -1600,8 +1706,8 @@ export default function App() {
     },
     {
       id: 'paisajismo',
-      label: 'PAISAJISMO',
-      dialogueStyle: { left: '65%', top: '15%' },
+      label: 'AJARDINAMIENTO',
+      dialogueStyle: { left: '52.2%', top: '29.4%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'landscape' }),
       onPointerEnter: handleLandscapeZoneEnter,
       onPointerLeave: handleLandscapeZoneLeave,
@@ -1617,7 +1723,7 @@ export default function App() {
     {
       id: 'academia',
       label: 'ACADEMIA',
-      dialogueStyle: { left: '30%', top: '66%' },
+      dialogueStyle: { left: '37%', top: '82.2%' },
       onClick: () => handleNavigate('academy'),
       onPointerEnter: handleAcademyZoneEnter,
       onPointerLeave: handleAcademyZoneLeave,
@@ -1632,9 +1738,7 @@ export default function App() {
     },
     {
       id: 'telefono',
-      label: 'TELÉFONO',
-      dialogueStyle: { left: '57%', top: '81%' },
-      onClick: () => handleNavigate('contact'),
+      onClick: handleOpenBusinessCard,
       onPointerEnter: handlePhoneZoneEnter,
       onPointerLeave: handlePhoneZoneLeave,
       regions: [
@@ -1648,8 +1752,8 @@ export default function App() {
     },
     {
       id: 'diseno',
-      label: 'DISEÑO',
-      dialogueStyle: { left: '33%', top: '32%' },
+      label: 'DISEÑO DE INTERIORES',
+      dialogueStyle: { left: '41.2%', top: '54.9%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'interiors' }),
       onPointerEnter: handleDesignZoneEnter,
       onPointerLeave: handleDesignZoneLeave,
@@ -1677,7 +1781,7 @@ export default function App() {
     {
       id: 'escenografia',
       label: 'ESCENOGRAFÍA',
-      dialogueStyle: { left: '70%', top: '39%' },
+      dialogueStyle: { left: '52.5%', top: '74%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'scenography' }),
       onPointerEnter: handleScenographyZoneEnter,
       onPointerLeave: handleScenographyZoneLeave,
@@ -1705,7 +1809,7 @@ export default function App() {
     {
       id: 'direccion-de-arte',
       label: 'DIRECCIÓN DE ARTE',
-      dialogueStyle: { left: '5%', top: '60%' },
+      dialogueStyle: { left: '13%', top: '82.2%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'art-direction' }),
       onPointerEnter: handleArtDirectionZoneEnter,
       regions: [
@@ -1751,6 +1855,8 @@ export default function App() {
           : 'min-h-screen bg-white px-8 py-6 text-stone-950'
       }
     >
+      <audio ref={ambientAudioRef} src="/sounds/sonido_ambiente.mp3" loop preload="auto" />
+      <audio ref={phoneAudioRef} src="/sounds/phone.mp3" preload="auto" />
       {isAssetsReady && activePage === 'projects' ? (
         <ProjectsPage
           activePage={activePage}
@@ -1761,10 +1867,226 @@ export default function App() {
             if (projectId === 'telefonica') {
               setActivePage('project-telefonica')
             }
+
+            if (projectId === 'el-bosque') {
+              setActivePage('project-el-bosque')
+            }
+
+            if (projectId === 'capilla') {
+              setActivePage('project-capilla')
+            }
+
+            if (projectId === 'nave-16') {
+              setActivePage('project-nave-16')
+            }
+
+            if (projectId === 'ufv') {
+              setActivePage('project-ufv')
+            }
+
+            if (projectId === 'efimero') {
+              setActivePage('project-efimero')
+            }
+
+            if (projectId === 'espacio-expositivo') {
+              setActivePage('project-espacio-expositivo')
+            }
+
+            if (projectId === 'playground') {
+              setActivePage('project-playground')
+            }
+
+            if (projectId === 'el-circulo') {
+              setActivePage('project-el-circulo')
+            }
+
+            if (projectId === 'cartel-teatro') {
+              setActivePage('project-cartel-teatro')
+            }
+
+            if (projectId === 'el-rastro') {
+              setActivePage('project-el-rastro')
+            }
+
+            if (projectId === 'hargok') {
+              setActivePage('project-hargok')
+            }
+
+            if (projectId === 'haz') {
+              setActivePage('project-haz')
+            }
+
+            if (projectId === 'podcast') {
+              setActivePage('project-podcast')
+            }
+
+            if (projectId === 'eneo') {
+              setActivePage('project-eneo')
+            }
+
+            if (projectId === 'fiestas-locales') {
+              setActivePage('project-fiestas-locales')
+            }
+
+            if (projectId === 'packaging') {
+              setActivePage('project-packaging')
+            }
+
+            if (projectId === 'ilustraciones') {
+              setActivePage('project-ilustraciones')
+            }
+
+            if (projectId === 'cross') {
+              setActivePage('project-cross')
+            }
+
+            if (projectId === 'pg') {
+              setActivePage('project-pg')
+            }
+
+            if (projectId === 'boat') {
+              setActivePage('project-boat')
+            }
+
+            if (projectId === 'album-musical') {
+              setActivePage('project-album-musical')
+            }
+
+            if (projectId === 'v-karting') {
+              setActivePage('project-v-karting')
+            }
+
+            if (projectId === 'soldrink') {
+              setActivePage('project-soldrink')
+            }
+
+            if (projectId === 'miteco') {
+              setActivePage('project-miteco')
+            }
           }}
         />
       ) : isAssetsReady && activePage === 'project-telefonica' ? (
         <TelefonicaProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-el-bosque' ? (
+        <ElBosqueProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-capilla' ? (
+        <CapillaProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-nave-16' ? (
+        <Nave16ProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-ufv' ? (
+        <UfvProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-efimero' ? (
+        <EfimeroProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-espacio-expositivo' ? (
+        <EspacioExpositivoProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-playground' ? (
+        <PlaygroundProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-el-circulo' ? (
+        <ElCirculoProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-cartel-teatro' ? (
+        <CartelTeatroProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-el-rastro' ? (
+        <ElRastroProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-hargok' ? (
+        <HargokProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-haz' ? (
+        <HazProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-podcast' ? (
+        <PodcastProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-eneo' ? (
+        <EneoProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-fiestas-locales' ? (
+        <FiestasLocalesProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-packaging' ? (
+        <PackagingProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-ilustraciones' ? (
+        <IlustracionesProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-cross' ? (
+        <CrossProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-pg' ? (
+        <PgProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-boat' ? (
+        <BoatProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-album-musical' ? (
+        <AlbumMusicalProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-v-karting' ? (
+        <VKartingProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-soldrink' ? (
+        <SoldrinkProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-miteco' ? (
+        <MitecoProjectPage
           onBack={() => setActivePage('home')}
           onNavigate={handleNavigate}
         />
@@ -1799,15 +2121,19 @@ export default function App() {
               backgroundSrc="/fondo.jpg"
               bird={birdCharacter}
               cartela={cartelaLayer}
+              businessCardOpen={isBusinessCardOpen}
               house={houseLayer}
               hotspots={sceneHotspots}
               onNavigate={handleNavigate}
               onBackgroundLoad={handleBackgroundLoad}
+              onCloseBusinessCard={() => setIsBusinessCardOpen(false)}
               overlayCharacters={overlayCharacters}
               sceneStyle={sceneStyle}
+              soundEnabled={soundEnabled}
               superTopCharacters={superTopCharacters}
               topCharacters={topCharacters}
               van={vanCharacter}
+              onSetSoundEnabled={setSoundEnabled}
             />
           </div>
         </section>
