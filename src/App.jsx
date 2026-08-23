@@ -940,7 +940,7 @@ export default function App() {
               },
             }, 0)
             .to(sofaRef.current, {
-              left: '52%',
+              left: '49.2%',
               duration: 2.2,
               ease: 'power1.inOut',
             }, 0)
