@@ -161,6 +161,14 @@ const sceneAssetUrls = [
   ...staticSceneAssets,
 ]
 
+const criticalSceneAssets = [
+  ...staticSceneAssets,
+  birdFrames[0], vanFrames[0], grafitiFrames[0], jardineroFrames[0], jardineraFrames[0],
+  arbolFrames[0], ordenadorFrames[0], banquitoFrames[0], sofaFrames[0], bibliotecarioFrames[0],
+  cuadroFrames[0], telefonoFrames[0], parejaFrames[0], personasSillasFrames[0], lectorFrames[0],
+  columpioFrames[0],
+]
+
 export default function App() {
   const [sceneRatio, setSceneRatio] = useState(2048 / 1152)
   const [isAssetsReady, setIsAssetsReady] = useState(false)
@@ -230,6 +238,8 @@ export default function App() {
   const telefonoImageRef = useRef(null)
   const telefonoTweenRef = useRef(null)
   const telefonoMoveTweenRef = useRef(null)
+  const telefonoAlertTweenRef = useRef(null)
+  const telefonoAlertTimeoutRef = useRef(null)
   const telefonoBubbleRef = useRef(null)
   const parejaRef = useRef(null)
   const parejaImageRef = useRef(null)
@@ -260,7 +270,7 @@ export default function App() {
   const columpioTweenRef = useRef(null)
   const columpioBubbleRef = useRef(null)
 
-  const sceneStyle = useSceneSize(sceneShellRef, sceneRatio)
+  const sceneStyle = useSceneSize(sceneShellRef, sceneRatio, isAssetsReady && activePage === 'home')
 
   const handleNavigate = (nextSection) => {
     if (typeof nextSection === 'object' && nextSection !== null) {
@@ -283,6 +293,9 @@ export default function App() {
   }
 
   const stopPhoneAlert = () => {
+    window.clearTimeout(telefonoAlertTimeoutRef.current)
+    telefonoAlertTweenRef.current?.kill()
+    telefonoAlertTweenRef.current = null
     const phoneAudio = phoneAudioRef.current
     if (phoneAudio) {
       phoneAudio.pause()
@@ -295,15 +308,29 @@ export default function App() {
 
   const playPhoneAlert = () => {
     const phoneAudio = phoneAudioRef.current
-    if (hasOpenedBusinessCard || !soundEnabled || !phoneAudio) return
+    if (hasOpenedBusinessCard) return
 
-    phoneAudio.currentTime = 0
-    phoneAudio.volume = 0.225
-    phoneAudio.onended = stopPhoneAlert
-    phoneAudio.play().then(() => {
-      telefonoTweenRef.current?.restart()
-      telefonoMoveTweenRef.current?.restart()
-    }).catch(() => {})
+    telefonoTweenRef.current?.restart()
+    telefonoMoveTweenRef.current?.restart()
+    telefonoAlertTweenRef.current?.kill()
+    telefonoAlertTweenRef.current = gsap.to(telefonoRef.current, {
+      scale: 1.16,
+      duration: 0.22,
+      repeat: 5,
+      yoyo: true,
+      ease: 'power1.inOut',
+    })
+
+    if (soundEnabled && phoneAudio) {
+      phoneAudio.currentTime = 0
+      phoneAudio.volume = 0.225
+      phoneAudio.onended = stopPhoneAlert
+      phoneAudio.play().catch(() => {
+        telefonoAlertTimeoutRef.current = window.setTimeout(stopPhoneAlert, 3_000)
+      })
+    } else {
+      telefonoAlertTimeoutRef.current = window.setTimeout(stopPhoneAlert, 3_000)
+    }
   }
 
   const handleOpenBusinessCard = () => {
@@ -330,7 +357,6 @@ export default function App() {
     if (
       !isAssetsReady ||
       activePage !== 'home' ||
-      !soundEnabled ||
       hasOpenedBusinessCard
     ) {
       return undefined
@@ -341,7 +367,7 @@ export default function App() {
     }, 20_000)
 
     return () => window.clearInterval(phoneInterval)
-  }, [activePage, hasOpenedBusinessCard, isAssetsReady, soundEnabled])
+  }, [activePage, hasOpenedBusinessCard, isAssetsReady])
 
   useEffect(() => {
     if (!isAssetsReady || activePage !== 'home') return
@@ -542,7 +568,7 @@ export default function App() {
 
   useEffect(() => {
     let isCancelled = false
-    const uniqueAssets = [...new Set(sceneAssetUrls)]
+    const uniqueAssets = [...new Set(criticalSceneAssets)]
 
     const preloadAssets = async () => {
       let loadedAssets = 0
@@ -565,28 +591,25 @@ export default function App() {
           (src) =>
             new Promise((resolve) => {
               const image = new Image()
+              let hasSettled = false
+              const settle = () => {
+                if (hasSettled) return
+                hasSettled = true
+                window.clearTimeout(timeoutId)
+                markAssetLoaded()
+                resolve()
+              }
+              const timeoutId = window.setTimeout(settle, 12_000)
               image.onload = () => {
                 if (src === '/fondo.jpg' && image.naturalWidth && image.naturalHeight) {
                   setSceneRatio(image.naturalWidth / image.naturalHeight)
                 }
-
-                markAssetLoaded()
-                resolve()
+                settle()
               }
               image.onerror = () => {
-                markAssetLoaded()
-                resolve()
+                settle()
               }
               image.src = src
-
-              if (image.complete) {
-                if (src === '/fondo.jpg' && image.naturalWidth && image.naturalHeight) {
-                  setSceneRatio(image.naturalWidth / image.naturalHeight)
-                }
-
-                markAssetLoaded()
-                resolve()
-              }
             }),
         ),
       )
@@ -594,6 +617,14 @@ export default function App() {
       if (!isCancelled) {
         setIsAssetsReady(true)
       }
+
+      // Keep non-critical animation frames warm without delaying first paint.
+      sceneAssetUrls
+        .filter((src) => !uniqueAssets.includes(src))
+        .forEach((src) => {
+          const image = new Image()
+          image.src = src
+        })
     }
 
     preloadAssets()
@@ -956,7 +987,7 @@ export default function App() {
               },
             }, '>')
             .to(sofaRef.current, {
-              left: '42%',
+              left: '43.44%',
               duration: 2.1,
               ease: 'power1.inOut',
             }, '<')
@@ -1441,7 +1472,7 @@ export default function App() {
       imageRef: sofaImageRef,
       src: sofaFrames[1],
       alt: 'Sofa animado',
-      style: { left: '42%', top: '56.4%', width: '10%' },
+      style: { left: '43.44%', top: '56.4%', width: '10%' },
     },
     {
       id: 'jardinero',

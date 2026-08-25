@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 
-export function useSceneSize(sceneShellRef, sceneRatio) {
+export function useSceneSize(sceneShellRef, sceneRatio, isSceneMounted) {
   const [sceneStyle, setSceneStyle] = useState({})
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!isSceneMounted) return undefined
+
     const updateSceneSize = () => {
       const shell = sceneShellRef.current
       if (!shell) return
@@ -23,11 +25,20 @@ export function useSceneSize(sceneShellRef, sceneRatio) {
       })
     }
 
+    // The shell is created after the loader, so measure on the next frame too.
     updateSceneSize()
+    const frameId = window.requestAnimationFrame(updateSceneSize)
+    const resizeObserver = new ResizeObserver(updateSceneSize)
+    const shell = sceneShellRef.current
+    if (shell) resizeObserver.observe(shell)
     window.addEventListener('resize', updateSceneSize)
 
-    return () => window.removeEventListener('resize', updateSceneSize)
-  }, [sceneRatio, sceneShellRef])
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', updateSceneSize)
+    }
+  }, [isSceneMounted, sceneRatio, sceneShellRef])
 
   return sceneStyle
 }
