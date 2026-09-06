@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
+import { useProjectNavigation } from '../context/ProjectNavigationContext'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
@@ -81,6 +82,7 @@ export default function ProjectsPage({
   onOpenProject,
 }) {
   const { language } = useLanguage()
+  const { navigateToPage } = useProjectNavigation()
   const [isSpanish, setIsSpanish] = useState(false)
   const [activeFilter, setActiveFilter] = useState(initialFilter)
 
@@ -118,7 +120,7 @@ export default function ProjectsPage({
             category={project.category}
             iconSrc={project.iconSrc}
             imageSrc={project.imageSrc}
-            onOpen={project.id ? () => onOpenProject?.(project.id) : undefined}
+            onOpen={project.id ? () => navigateToPage(`project-${project.id}`) : undefined}
           />
         ))}
       </div>

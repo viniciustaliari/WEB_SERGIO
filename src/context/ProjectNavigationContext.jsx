@@ -13,8 +13,12 @@ export function ProjectNavigationProvider({ children }) {
     navigateRef.current?.({ pageId: 'projects', filterId })
   }, [])
 
+  const navigateToPage = useCallback((pageId) => {
+    navigateRef.current?.(pageId)
+  }, [])
+
   return (
-    <ProjectNavigationContext.Provider value={{ navigateToProjects, registerNavigate }}>
+    <ProjectNavigationContext.Provider value={{ navigateToPage, navigateToProjects, registerNavigate }}>
       {children}
     </ProjectNavigationContext.Provider>
   )

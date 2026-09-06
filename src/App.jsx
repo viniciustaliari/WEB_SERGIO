@@ -301,25 +301,50 @@ export default function App() {
 
   const sceneStyle = useSceneSize(sceneShellRef, sceneRatio, isAssetsReady && activePage === 'home')
 
-  const handleNavigate = (nextSection) => {
-    if (typeof nextSection === 'object' && nextSection !== null) {
-      setActivePage(nextSection.pageId ?? 'home')
+  const applyNavigationState = ({ filterId = 'all', pageId = 'home', searchQuery = '' }) => {
+    setActivePage(pageId)
 
-      if (nextSection.pageId === 'projects') {
-        setProjectsFilter(nextSection.filterId ?? 'all')
-        setProjectsSearch(nextSection.searchQuery ?? '')
-      }
-
-      return
-    }
-
-    setActivePage(nextSection ?? 'home')
-
-    if (nextSection === 'projects') {
-      setProjectsFilter('all')
-      setProjectsSearch('')
+    if (pageId === 'projects') {
+      setProjectsFilter(filterId)
+      setProjectsSearch(searchQuery)
     }
   }
+
+  const handleNavigate = (nextSection) => {
+    const nextState = typeof nextSection === 'object' && nextSection !== null
+      ? {
+          pageId: nextSection.pageId ?? 'home',
+          filterId: nextSection.filterId ?? 'all',
+          searchQuery: nextSection.searchQuery ?? '',
+        }
+      : {
+          pageId: nextSection ?? 'home',
+          filterId: 'all',
+          searchQuery: '',
+        }
+
+    window.history.pushState({ app: 'estudio-228', ...nextState }, '', window.location.href)
+    applyNavigationState(nextState)
+  }
+
+  useEffect(() => {
+    const savedState = window.history.state
+
+    if (savedState?.app === 'estudio-228') {
+      applyNavigationState(savedState)
+    } else {
+      window.history.replaceState({ app: 'estudio-228', pageId: 'home', filterId: 'all', searchQuery: '' }, '', window.location.href)
+    }
+
+    const handlePopState = (event) => {
+      if (event.state?.app === 'estudio-228') {
+        applyNavigationState(event.state)
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
 
   useEffect(() => {
     registerNavigate(handleNavigate)
