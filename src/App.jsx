@@ -1012,7 +1012,7 @@ export default function App() {
             }, 0)
             .to(sofaRef.current, {
               left: '49.2%',
-              duration: 2.2,
+              duration: 3,
               ease: 'power1.inOut',
             }, 0)
             .to(sofaState, {
@@ -1025,7 +1025,7 @@ export default function App() {
             }, '>')
             .to(sofaRef.current, {
               left: '43.44%',
-              duration: 2.1,
+              duration: 3,
               ease: 'power1.inOut',
             }, '<')
             // The sofa rests only after returning to frame 2.png and its origin.
