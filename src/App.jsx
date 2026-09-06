@@ -19,6 +19,7 @@ import HargokProjectPage from './components/HargokProjectPage'
 import HazProjectPage from './components/HazProjectPage'
 import IlustracionesProjectPage from './components/IlustracionesProjectPage'
 import MitecoProjectPage from './components/MitecoProjectPage'
+import Miteco2ProjectPage from './components/Miteco2ProjectPage'
 import Nave16ProjectPage from './components/Nave16ProjectPage'
 import PlaygroundProjectPage from './components/PlaygroundProjectPage'
 import PodcastProjectPage from './components/PodcastProjectPage'
@@ -54,6 +55,8 @@ import {
   vanFrames,
 } from './data/sceneFrames'
 import { useSceneSize } from './hooks/useSceneSize'
+import { useLanguage } from './context/LanguageContext'
+import { useProjectNavigation } from './context/ProjectNavigationContext'
 
 function showBubble(bubbleRef) {
   if (!bubbleRef.current) return
@@ -138,7 +141,7 @@ const staticSceneAssets = [
   '/Frames/imoviles/personajes_fiesta/Fiesta.png',
   '/Frames/imoviles/personaje_microfono/personaje.png',
   '/Frames/imoviles/spray/spray.png',
-  '/Frames/imoviles/cartela/cartela.svg',
+  '/Frames/imoviles/cartela/cartela.png',
 ]
 
 const sceneAssetUrls = [
@@ -170,6 +173,31 @@ const criticalSceneAssets = [
 ]
 
 export default function App() {
+  const { language } = useLanguage()
+  const { registerNavigate } = useProjectNavigation()
+  const sceneCopy = language === 'en'
+    ? {
+        landscape: 'LANDSCAPING',
+        academy: 'ACADEMY',
+        interiors: 'INTERIOR DESIGN',
+        scenography: 'SCENOGRAPHY',
+        graphic: 'GRAPHIC DESIGN',
+        artDirection: 'ART DIRECTION',
+        landscapeDetail: 'Landscape design and gardening',
+        contact: 'Contact',
+        phoneRinging: 'PHONE RINGING',
+      }
+    : {
+        landscape: 'AJARDINAMIENTO',
+        academy: 'ACADEMIA',
+        interiors: 'DISEÑO DE INTERIORES',
+        scenography: 'ESCENOGRAFÍA',
+        graphic: 'DISEÑO GRÁFICO',
+        artDirection: 'DIRECCIÓN DE ARTE',
+        landscapeDetail: 'Paisajismo y ajardinamiento',
+        contact: 'Contactar',
+        phoneRinging: 'TELÉFONO SONANDO',
+      }
   const [sceneRatio, setSceneRatio] = useState(2048 / 1152)
   const [isAssetsReady, setIsAssetsReady] = useState(false)
   const [loadingProgress, setLoadingProgress] = useState(0)
@@ -179,6 +207,7 @@ export default function App() {
   const [isBusinessCardOpen, setIsBusinessCardOpen] = useState(false)
   const [hasOpenedBusinessCard, setHasOpenedBusinessCard] = useState(false)
   const [soundEnabled, setSoundEnabled] = useState(true)
+  const [isPhoneAlertActive, setIsPhoneAlertActive] = useState(false)
   const rootRef = useRef(null)
   const sceneShellRef = useRef(null)
   const ambientAudioRef = useRef(null)
@@ -292,8 +321,14 @@ export default function App() {
     }
   }
 
+  useEffect(() => {
+    registerNavigate(handleNavigate)
+  }, [handleNavigate, registerNavigate])
+
   const stopPhoneAlert = () => {
     window.clearTimeout(telefonoAlertTimeoutRef.current)
+    setIsPhoneAlertActive(false)
+    hideBubble(telefonoBubbleRef)
     telefonoAlertTweenRef.current?.kill()
     telefonoAlertTweenRef.current = null
     const phoneAudio = phoneAudioRef.current
@@ -310,6 +345,8 @@ export default function App() {
     const phoneAudio = phoneAudioRef.current
     if (hasOpenedBusinessCard) return
 
+    setIsPhoneAlertActive(true)
+    showBubble(telefonoBubbleRef)
     telefonoTweenRef.current?.restart()
     telefonoMoveTweenRef.current?.restart()
     telefonoAlertTweenRef.current?.kill()
@@ -1479,7 +1516,7 @@ export default function App() {
       ref: jardineroRef,
       anchorClassName: 'jardinero-anchor',
       bubbleRef: jardineroBubbleRef,
-      bubbleText: 'Paisajismo y ajardinamiento',
+      bubbleText: sceneCopy.landscapeDetail,
       imageClassName: 'jardinero-frame',
       imageRef: jardineroImageRef,
       interactive: true,
@@ -1494,7 +1531,7 @@ export default function App() {
       ref: jardineraRef,
       anchorClassName: 'jardinera-anchor',
       bubbleRef: jardineraBubbleRef,
-      bubbleText: 'Paisajismo y ajardinamiento',
+      bubbleText: sceneCopy.landscapeDetail,
       imageClassName: 'jardinera-frame',
       imageRef: jardineraImageRef,
       interactive: true,
@@ -1512,7 +1549,7 @@ export default function App() {
       ref: vanCartelaRef,
       anchorClassName: 'cartela-personaje-anchor',
       imageClassName: 'cartela-personaje-frame',
-      src: '/Frames/imoviles/cartela/cartela.svg',
+      src: '/Frames/imoviles/cartela/cartela.png',
       alt: 'Cartela junto a la furgo',
       // Keep this overlay aligned with the van below it.
       style: { left: '-7%', top: '74%', width: '38%' },
@@ -1562,7 +1599,7 @@ export default function App() {
       ref: telefonoRef,
       anchorClassName: 'telefono-anchor',
       bubbleRef: telefonoBubbleRef,
-      bubbleText: 'Contactar',
+      bubbleText: isPhoneAlertActive ? sceneCopy.phoneRinging : sceneCopy.contact,
       imageClassName: 'telefono-frame',
       imageRef: telefonoImageRef,
       interactive: true,
@@ -1636,7 +1673,7 @@ export default function App() {
       ref: hombreSentadoRef,
       anchorClassName: 'hombre-sentado-anchor',
       bubbleRef: hombreSentadoBubbleRef,
-      bubbleText: 'Academia',
+      bubbleText: sceneCopy.academy,
       imageClassName: 'hombre-sentado-frame',
       imageRef: hombreSentadoImageRef,
       interactive: true,
@@ -1651,7 +1688,7 @@ export default function App() {
       ref: mujerSentadaRef,
       anchorClassName: 'mujer-sentada-anchor',
       bubbleRef: mujerSentadaBubbleRef,
-      bubbleText: 'Academia',
+      bubbleText: sceneCopy.academy,
       imageClassName: 'mujer-sentada-frame',
       imageRef: mujerSentadaImageRef,
       interactive: true,
@@ -1666,7 +1703,7 @@ export default function App() {
       ref: profeRef,
       anchorClassName: 'profe-anchor',
       bubbleRef: profeBubbleRef,
-      bubbleText: 'Academia',
+      bubbleText: sceneCopy.academy,
       imageClassName: 'profe-frame',
       imageRef: profeImageRef,
       interactive: true,
@@ -1681,7 +1718,7 @@ export default function App() {
       ref: columpioRef,
       anchorClassName: 'columpio-anchor',
       bubbleRef: columpioBubbleRef,
-      bubbleText: 'Escenografía',
+      bubbleText: sceneCopy.scenography,
       imageClassName: 'columpio-frame',
       imageRef: columpioImageRef,
       interactive: true,
@@ -1698,7 +1735,7 @@ export default function App() {
     anchorClassName: 'van-anchor',
     bubbleClassName: 'van-dialogue',
     bubbleRef: vanBubbleRef,
-    bubbleText: 'dirección de arte',
+    bubbleText: sceneCopy.artDirection,
     imageClassName: 'van-frame',
     imageRef: vanImageRef,
     interactive: true,
@@ -1724,7 +1761,7 @@ export default function App() {
   const sceneHotspots = [
     {
       id: '228-estudio',
-      label: 'DISEÑO GRÁFICO',
+      label: sceneCopy.graphic,
       dialogueStyle: { left: '40.2%', top: '20.5%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'graphic' }),
       onPointerEnter: handleStudioZoneEnter,
@@ -1740,7 +1777,7 @@ export default function App() {
     },
     {
       id: 'paisajismo',
-      label: 'AJARDINAMIENTO',
+      label: sceneCopy.landscape,
       dialogueStyle: { left: '52.2%', top: '29.4%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'landscape' }),
       onPointerEnter: handleLandscapeZoneEnter,
@@ -1756,7 +1793,7 @@ export default function App() {
     },
     {
       id: 'academia',
-      label: 'ACADEMIA',
+      label: sceneCopy.academy,
       dialogueStyle: { left: '37%', top: '82.2%' },
       onClick: () => handleNavigate('academy'),
       onPointerEnter: handleAcademyZoneEnter,
@@ -1786,7 +1823,7 @@ export default function App() {
     },
     {
       id: 'diseno',
-      label: 'DISEÑO DE INTERIORES',
+      label: sceneCopy.interiors,
       dialogueStyle: { left: '41.2%', top: '54.9%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'interiors' }),
       onPointerEnter: handleDesignZoneEnter,
@@ -1814,7 +1851,7 @@ export default function App() {
     },
     {
       id: 'escenografia',
-      label: 'ESCENOGRAFÍA',
+      label: sceneCopy.scenography,
       dialogueStyle: { left: '52.5%', top: '74%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'scenography' }),
       onPointerEnter: handleScenographyZoneEnter,
@@ -1842,7 +1879,7 @@ export default function App() {
     },
     {
       id: 'direccion-de-arte',
-      label: 'DIRECCIÓN DE ARTE',
+      label: sceneCopy.artDirection,
       dialogueStyle: { left: '13%', top: '82.2%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'art-direction' }),
       onPointerEnter: handleArtDirectionZoneEnter,
@@ -1998,6 +2035,10 @@ export default function App() {
             if (projectId === 'miteco') {
               setActivePage('project-miteco')
             }
+
+            if (projectId === 'miteco-2') {
+              setActivePage('project-miteco-2')
+            }
           }}
         />
       ) : isAssetsReady && activePage === 'project-telefonica' ? (
@@ -2122,6 +2163,11 @@ export default function App() {
         />
       ) : isAssetsReady && activePage === 'project-miteco' ? (
         <MitecoProjectPage
+          onBack={() => setActivePage('home')}
+          onNavigate={handleNavigate}
+        />
+      ) : isAssetsReady && activePage === 'project-miteco-2' ? (
+        <Miteco2ProjectPage
           onBack={() => setActivePage('home')}
           onNavigate={handleNavigate}
         />
