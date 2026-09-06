@@ -1334,7 +1334,7 @@ a {
   font-size: clamp(2.9rem, 4.3vw, 4.3rem);
   font-weight: 700;
   line-height: 0.92;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.015em;
 }
 
 .project-detail-location {
