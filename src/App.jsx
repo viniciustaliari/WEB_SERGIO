@@ -921,7 +921,7 @@ export default function App() {
       if (arbolRef.current && arbolImageRef.current) {
         const arbolState = { frame: 0 }
         const totalFrames = arbolFrames.length
-        const frameDuration = totalFrames / 2
+        const frameDuration = totalFrames / 4
 
         gsap.from(arbolRef.current, {
           opacity: 0,
