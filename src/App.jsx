@@ -1479,7 +1479,7 @@ export default function App() {
       onPointerLeave: handleOrdenadorLeave,
       src: ordenadorFrames[0],
       alt: 'Ordenador animado',
-      style: { left: '57%', top: '52.9%', width: '6.5%' },
+      style: { left: '57%', top: '53%', width: '6.5%' },
     },
     {
       id: 'arbol',
@@ -1504,7 +1504,7 @@ export default function App() {
       imageRef: grafitiImageRef,
       src: grafitiFrames[0],
       alt: 'Grafiti animado',
-      style: { left: '45.2%', top: '16.7%', width: '9%' },
+      style: { left: '45.2%', top: '17.1%', width: '9%' },
     },
     {
       id: 'bibliotecario',
@@ -1549,7 +1549,7 @@ export default function App() {
       onPointerLeave: handleJardineroLeave,
       src: jardineroFrames[0],
       alt: 'Jardinero animado',
-      style: { left: '63.3%', top: '24.6%', width: '12.4%' },
+      style: { left: '63.3%', top: '24.8%', width: '12.4%' },
     },
     {
       id: 'jardinera',
@@ -1564,7 +1564,7 @@ export default function App() {
       onPointerLeave: handleJardineraLeave,
       src: jardineraFrames[0],
       alt: 'Jardinera animada',
-      style: { left: '59%', top: '28.8%', width: '7.3%' },
+      style: { left: '59%', top: '29.2%', width: '7.3%' },
     },
   ]
 
@@ -1585,7 +1585,7 @@ export default function App() {
       imageClassName: 'spray-frame',
       src: '/Frames/imoviles/spray/spray.png',
       alt: 'Spray',
-      style: { left: '37.5%', top: '15.5%', width: '9%' },
+      style: { left: '37.5%', top: '15.9%', width: '9%' },
     },
     {
       id: 'persona-escaleras',
@@ -1593,7 +1593,7 @@ export default function App() {
       imageClassName: 'persona-escaleras-frame',
       src: '/Frames/imoviles/personaje_escaleras/persona_1.png',
       alt: 'Persona en las escaleras',
-      style: { left: '67%', top: '94%', width: '4%' },
+      style: { left: '67%', top: '93.3%', width: '4%' },
     },
     {
       id: 'personajes-fiesta',
@@ -1609,7 +1609,7 @@ export default function App() {
       imageClassName: 'maleta-frame',
       src: '/Frames/imoviles/maleta/maleta.png',
       alt: 'Maleta',
-      style: { left: '25.7%', top: '73.8%', width: '3.1%' },
+      style: { left: '25.7%', top: '73.6%', width: '3.1%' },
     },
     {
       id: 'fumador',
@@ -1617,7 +1617,7 @@ export default function App() {
       imageClassName: 'fumador-frame',
       src: '/Frames/imoviles/fumador/fumador.png',
       alt: 'Fumador',
-      style: { left: '29%', top: '28.6%', width: '4%' },
+      style: { left: '29%', top: '28.8%', width: '4%' },
     },
     {
       id: 'telefono',
@@ -1645,7 +1645,7 @@ export default function App() {
       imageRef: parejaImageRef,
       src: parejaFrames[0],
       alt: 'Pareja animada',
-      style: { left: '66%', top: '69%', width: '8%' },
+      style: { left: '66%', top: '68.9%', width: '8%' },
     },
     {
       id: 'personaje-microfono',
@@ -1653,7 +1653,7 @@ export default function App() {
       imageClassName: 'personaje-microfono-frame',
       src: '/Frames/imoviles/personaje_microfono/personaje.png',
       alt: 'Personaje con microfono',
-      style: { left: '54%', top: '60.6%', width: '5.3%' },
+      style: { left: '54%', top: '60.5%', width: '5.3%' },
     },
     {
       id: 'tablero',
@@ -1661,7 +1661,7 @@ export default function App() {
       imageClassName: 'tablero-frame',
       src: '/Frames/imoviles/tablero/tablero.png',
       alt: 'Tablero',
-      style: { left: '33.4%', top: '72%', width: '4.8%', zIndex: 120 },
+      style: { left: '33.4%', top: '71.7%', width: '4.8%', zIndex: 120 },
     },
     {
       id: 'humo',
@@ -1706,7 +1706,7 @@ export default function App() {
       onPointerLeave: handleHombreSentadoLeave,
       src: hombreSentadoFrames[0],
       alt: 'Hombre sentado animado',
-      style: { left: '38.2%', top: '78%', width: '6.6%' },
+      style: { left: '38.2%', top: '77.7%', width: '6.6%' },
     },
     {
       id: 'mujer-sentada',
@@ -1721,7 +1721,7 @@ export default function App() {
       onPointerLeave: handleMujerSentadaLeave,
       src: mujerSentadaFrames[0],
       alt: 'Mujer sentada animada',
-      style: { left: '34%', top: '78.2%', width: '6.3%', zIndex: 130 },
+      style: { left: '34%', top: '77.9%', width: '6.3%', zIndex: 130 },
     },
     {
       id: 'profe',
@@ -1736,7 +1736,7 @@ export default function App() {
       onPointerLeave: handleProfeLeave,
       src: profeFrames[0],
       alt: 'Profe animado',
-      style: { left: '46%', top: '76.9%', width: '7.9%' },
+      style: { left: '46%', top: '76.6%', width: '7.9%' },
     },
     {
       id: 'columpio',
@@ -1768,7 +1768,7 @@ export default function App() {
     onPointerLeave: handleVanLeave,
     src: vanFrames[0],
     alt: 'Furgo animada',
-    style: { left: '17%', top: '74.1%', width: '24%' },
+    style: { left: '17%', top: '73.8%', width: '24%' },
   }
 
   const birdCharacter = {
@@ -1924,9 +1924,9 @@ export default function App() {
     alt: 'Capa central de la casa',
     className: 'absolute left-1/2 top-1/2 w-full object-contain',
     style: {
-      left: '49.9%',
-      top: '57.9%',
-      width: '98.2%',
+      left: '50%',
+      top: '60.8%',
+      width: '97%',
       transform: 'translate(-50%, -50%) scale(1.2)',
     },
   }
