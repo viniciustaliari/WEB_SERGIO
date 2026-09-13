@@ -8,17 +8,17 @@ const primaryItems = [
   { label: '4. DISEÑO GRÁFICO', pageId: 'projects', filterId: 'graphic' },
   { label: '5. DIRECCIÓN DE ARTE', pageId: 'projects', filterId: 'art-direction' },
   { label: '6. ACADEMIA', pageId: 'academy' },
-  { label: 'TIENDA ONLINE', pageId: 'shop' },
 ]
 
 const secondaryItems = [
   { label: 'CONTACTO', pageId: 'contact' },
   { label: 'ESTUDIO', pageId: 'studio' },
+  { label: 'TIENDA ONLINE', pageId: 'shop' },
 ]
 
 const menuTranslations = {
-  es: ['1. DISE\u00d1O DE INTERIORES', '2. PAISAJISMO', '3. ESCENOGRAF\u00cdA', '4. DISE\u00d1O GR\u00c1FICO', '5. DIRECCI\u00d3N DE ARTE', '6. ACADEMIA', 'TIENDA ONLINE', 'CONTACTO', 'ESTUDIO'],
-  en: ['1. INTERIOR DESIGN', '2. LANDSCAPE DESIGN', '3. SCENOGRAPHY', '4. GRAPHIC DESIGN', '5. ART DIRECTION', '6. ACADEMY', 'ONLINE SHOP', 'CONTACT', 'STUDIO'],
+  es: ['1. DISE\u00d1O DE INTERIORES', '2. PAISAJISMO', '3. ESCENOGRAF\u00cdA', '4. DISE\u00d1O GR\u00c1FICO', '5. DIRECCI\u00d3N DE ARTE', '6. ACADEMIA', 'CONTACTO', 'ESTUDIO', 'TIENDA ONLINE'],
+  en: ['1. INTERIOR DESIGN', '2. LANDSCAPE DESIGN', '3. SCENOGRAPHY', '4. GRAPHIC DESIGN', '5. ART DIRECTION', '6. ACADEMY', 'CONTACT', 'STUDIO', 'ONLINE SHOP'],
 }
 
 export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled = false }) {
@@ -115,17 +115,32 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
 
           <div className="scene-menu-footer">
             <div className="scene-menu-socials">
-              <span aria-label="LinkedIn">
-                <img src="/linkedin.png" alt="" aria-hidden="true" />
-              </span>
               <a
                 className="scene-menu-social-link"
-                href="https://www.instagram.com/estudio_228/"
+                href="https://www.behance.net/M047"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn de M047"
+              >
+                <img src="/linkedin.png" alt="" aria-hidden="true" />
+              </a>
+              <a
+                className="scene-menu-social-link"
+                href="https://www.instagram.com/m047.studio/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram de M047"
               >
                 <img src="/instagram.png" alt="" aria-hidden="true" />
+              </a>
+              <a
+                className="scene-menu-social-behance"
+                href="https://www.behance.net/M047"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Behance de M047"
+              >
+                <img src="/behance.png" alt="" aria-hidden="true" />
               </a>
               <div
                 className="scene-menu-switch scene-menu-footer-switch"

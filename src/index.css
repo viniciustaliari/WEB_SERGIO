@@ -424,8 +424,15 @@ a {
   gap: 0.04rem;
 }
 
-.scene-menu-socials > span:first-child,
 .scene-menu-social-link {
+  display: inline-flex;
+  width: 1.5rem;
+  height: 2.7rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.scene-menu-social-behance {
   display: inline-flex;
   width: 1.5rem;
   height: 2.7rem;
@@ -1459,13 +1466,17 @@ a {
 }
 
 .contact-page-image {
-  align-self: start;
+  height: 100%;
+  align-self: stretch;
+  object-fit: cover;
+  object-position: center;
 }
 
 .contact-page-copy {
   display: flex;
   flex-direction: column;
   align-self: stretch;
+  min-height: 0;
   padding-top: 0.1rem;
 }
 
@@ -1502,6 +1513,19 @@ a {
   font-family: var(--font-condensed);
   font-size: clamp(1.18rem, 1.34vw, 1.7rem);
   line-height: 1.06;
+}
+
+.contact-page-email {
+  color: #111111;
+  font-family: var(--font-condensed);
+  font-size: clamp(1.18rem, 1.34vw, 1.7rem);
+  line-height: 1.06;
+  text-decoration: none;
+}
+
+.contact-page-email:hover,
+.contact-page-email:focus-visible {
+  text-decoration: underline;
 }
 
 .studio-page-group p {
@@ -1615,6 +1639,12 @@ a {
   .contact-page-content {
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
+  }
+
+  .contact-page-image {
+    height: auto;
+    align-self: start;
+    object-fit: contain;
   }
 
   .contact-page-copy {

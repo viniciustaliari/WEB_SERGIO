@@ -4,17 +4,17 @@ import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 
 const contactGroups = [
-  ['Calle Camarena 228 4\u00baC', '28047 Madrid', 'T. (+34) 633 878 755', 'info@228.es'],
-  ['CV - Portfolios:', 'info@228.es'],
-  ['Publicaciones y prensa:', 'info@228.es'],
+  ['28047 Madrid', 'T. (+34) 633 878 755', 'contacto@m047.es'],
+  ['CV - Portfolios:', 'info@m047.es'],
+  ['Publicaciones y prensa:', 'info@m047.es'],
 ]
 
 export default function ContactPage({ activePage, onBack, onNavigate }) {
   const { language } = useLanguage()
   const contactCopy = language === 'es' ? contactGroups : [
-    ['Calle Camarena 228 4\u00baC', '28047 Madrid', 'T. (+34) 633 878 755', 'info@228.es'],
-    ['CV - Portfolios:', 'info@228.es'],
-    ['Publications and press:', 'info@228.es'],
+    ['28047 Madrid', 'T. (+34) 633 878 755', 'contacto@m047.es'],
+    ['CV - Portfolios:', 'info@m047.es'],
+    ['Publications and press:', 'info@m047.es'],
   ]
 
   return (
@@ -34,13 +34,19 @@ export default function ContactPage({ activePage, onBack, onNavigate }) {
         />
 
         <div className="contact-page-copy">
-          <h1>M047</h1>
+          <h1>Estudio M047</h1>
 
           <div className="contact-page-groups">
             {contactCopy.map((group, index) => (
               <div key={index} className="contact-page-group">
                 {group.map((line) => (
-                  <p key={line}>{line}</p>
+                  line.includes('@') ? (
+                    <a key={line} className="contact-page-email" href={`mailto:${line}`}>
+                      {line}
+                    </a>
+                  ) : (
+                    <p key={line}>{line}</p>
+                  )
                 ))}
               </div>
             ))}
