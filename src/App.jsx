@@ -323,21 +323,21 @@ export default function App() {
           searchQuery: '',
         }
 
-    window.history.pushState({ app: 'estudio-228', ...nextState }, '', window.location.href)
+    window.history.pushState({ app: 'm047', ...nextState }, '', window.location.href)
     applyNavigationState(nextState)
   }
 
   useEffect(() => {
     const savedState = window.history.state
 
-    if (savedState?.app === 'estudio-228') {
+    if (savedState?.app === 'm047') {
       applyNavigationState(savedState)
     } else {
-      window.history.replaceState({ app: 'estudio-228', pageId: 'home', filterId: 'all', searchQuery: '' }, '', window.location.href)
+      window.history.replaceState({ app: 'm047', pageId: 'home', filterId: 'all', searchQuery: '' }, '', window.location.href)
     }
 
     const handlePopState = (event) => {
-      if (event.state?.app === 'estudio-228') {
+      if (event.state?.app === 'm047') {
         applyNavigationState(event.state)
       }
     }
@@ -1785,7 +1785,7 @@ export default function App() {
   // Add one or more rectangular regions per department to compose irregular rooms.
   const sceneHotspots = [
     {
-      id: '228-estudio',
+      id: 'm047-estudio',
       label: sceneCopy.graphic,
       dialogueStyle: { left: '40.2%', top: '20.5%' },
       onClick: () => handleNavigate({ pageId: 'projects', filterId: 'graphic' }),

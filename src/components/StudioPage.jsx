@@ -48,7 +48,7 @@ export default function StudioPage({ activePage, onBack, onNavigate }) {
         />
 
         <div className="contact-page-copy studio-page-copy">
-          <h1>Estudio 2 28</h1>
+          <h1>M047</h1>
 
           <div className="contact-page-groups studio-page-groups">
             {studioCopy.map((group, index) => (

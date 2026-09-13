@@ -34,7 +34,7 @@ export default function ContactPage({ activePage, onBack, onNavigate }) {
         />
 
         <div className="contact-page-copy">
-          <h1>Estudio 2 28</h1>
+          <h1>M047</h1>
 
           <div className="contact-page-groups">
             {contactCopy.map((group, index) => (

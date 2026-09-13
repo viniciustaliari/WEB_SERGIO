@@ -123,7 +123,7 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
                 href="https://www.instagram.com/estudio_228/"
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Instagram de Estudio 2 28"
+                aria-label="Instagram de M047"
               >
                 <img src="/instagram.png" alt="" aria-hidden="true" />
               </a>
@@ -151,7 +151,7 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
                 </button>
               </div>
             </div>
-            <span className="scene-menu-code">2 28</span>
+            <span className="scene-menu-code">M047</span>
           </div>
         </div>
       ) : null}

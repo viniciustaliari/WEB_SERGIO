@@ -104,7 +104,7 @@ export default function SceneArtboard({
           className="scene-business-card-modal"
           role="dialog"
           aria-modal="true"
-          aria-label="Tarjeta de visita de Estudio 2 28"
+          aria-label="Tarjeta de visita de M047"
         >
           <button
             type="button"
@@ -113,7 +113,7 @@ export default function SceneArtboard({
             onClick={onCloseBusinessCard}
           />
           <div className="scene-business-card-content">
-            <img src="/tarjeta_visita.svg" alt="Tarjeta de visita de Estudio 2 28" />
+            <img src="/tarjeta_visita.svg" alt="Tarjeta de visita de M047" />
           </div>
         </div>
       ) : null}
