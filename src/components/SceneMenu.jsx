@@ -117,7 +117,7 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
             <div className="scene-menu-socials">
               <a
                 className="scene-menu-social-link"
-                href="https://www.behance.net/M047"
+                href="https://www.linkedin.com/in/m047/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn de M047"
