@@ -1200,6 +1200,10 @@ a {
     linear-gradient(145deg, #dad3c6, #f2eee7 60%, #cfc6b7);
 }
 
+.projects-card--v-karting .projects-card-image {
+  background: transparent;
+}
+
 .projects-card-image img {
   width: 100%;
   height: 100%;
