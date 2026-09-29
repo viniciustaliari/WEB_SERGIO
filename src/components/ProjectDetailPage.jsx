@@ -1,12 +1,17 @@
+import { useState } from 'react'
 import { useLanguage } from '../context/LanguageContext'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
 import { getItalianProjectContent } from '../content/italianProjectContent'
 
-export default function ProjectDetailPage({ onBack, onNavigate, activeFilter, image, copy }) {
+export default function ProjectDetailPage({ onBack, onNavigate, activeFilter, image, copy, variants }) {
   const { language } = useLanguage()
-  const content = language === 'it' ? getItalianProjectContent(copy) : copy[language] ?? copy.en
+  const [variantIndex, setVariantIndex] = useState(0)
+  const selectedVariant = variants?.[variantIndex]
+  const selectedCopy = selectedVariant?.copy ?? copy
+  const selectedImage = selectedVariant?.image ?? image
+  const content = language === 'it' ? getItalianProjectContent(selectedCopy) : selectedCopy[language] ?? selectedCopy.en
 
   return (
     <section className="projects-page project-detail-page">
@@ -14,7 +19,7 @@ export default function ProjectDetailPage({ onBack, onNavigate, activeFilter, im
       <ProjectsFilterBar activeFilter={activeFilter} />
       <div className="project-detail-layout">
         <div className="project-detail-visual">
-          <img className="project-detail-image" src={image} alt={content.alt} />
+          <img className="project-detail-image" src={selectedImage} alt={content.alt} />
         </div>
         <aside className="project-detail-sidebar">
           <h1>{content.title}</h1>
@@ -33,6 +38,7 @@ export default function ProjectDetailPage({ onBack, onNavigate, activeFilter, im
               ))}
             </div>
           </div>
+          {variants?.length > 1 ? <nav className="project-detail-pagination" aria-label="Propuestas MITECO">{variants.map((variant, index) => <button key={variant.image} type="button" className={`project-detail-pagination-button${variantIndex === index ? ' is-active' : ''}`} aria-current={variantIndex === index ? 'page' : undefined} onClick={() => setVariantIndex(index)}>{index + 1}</button>)}</nav> : null}
         </aside>
       </div>
       <PageFooter />

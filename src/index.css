@@ -1366,6 +1366,31 @@ a {
   padding-top: 1rem;
 }
 
+.project-detail-pagination {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 2rem;
+}
+
+.project-detail-pagination-button {
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0;
+  border: 1px solid rgba(17, 17, 17, 0.45);
+  background: transparent;
+  color: #111111;
+  font-family: var(--font-condensed);
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.project-detail-pagination-button.is-active {
+  border-color: #111111;
+  background: #111111;
+  color: #ffffff;
+}
+
 .project-detail-meta h2 {
   font-size: clamp(1.34rem, 1.45vw, 1.7rem);
   font-weight: 700;

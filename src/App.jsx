@@ -19,7 +19,6 @@ import HargokProjectPage from './components/HargokProjectPage'
 import HazProjectPage from './components/HazProjectPage'
 import IlustracionesProjectPage from './components/IlustracionesProjectPage'
 import MitecoProjectPage from './components/MitecoProjectPage'
-import Miteco2ProjectPage from './components/Miteco2ProjectPage'
 import Nave16ProjectPage from './components/Nave16ProjectPage'
 import PlaygroundProjectPage from './components/PlaygroundProjectPage'
 import PodcastProjectPage from './components/PodcastProjectPage'
@@ -2074,7 +2073,7 @@ export default function App() {
             }
 
             if (projectId === 'miteco-2') {
-              setActivePage('project-miteco-2')
+              setActivePage('project-miteco')
             }
           }}
         />
@@ -2200,11 +2199,6 @@ export default function App() {
         />
       ) : isAssetsReady && activePage === 'project-miteco' ? (
         <MitecoProjectPage
-          onBack={() => setActivePage('home')}
-          onNavigate={handleNavigate}
-        />
-      ) : isAssetsReady && activePage === 'project-miteco-2' ? (
-        <Miteco2ProjectPage
           onBack={() => setActivePage('home')}
           onNavigate={handleNavigate}
         />

@@ -1,6 +1,6 @@
 import ProjectDetailPage from './ProjectDetailPage'
 
-const copy = {
+export const miteco2Copy = {
   es: {
     title: 'Proyecto Ajardinamiento MITECO 2',
     location: 'Madrid, España',
@@ -38,5 +38,5 @@ const copy = {
 }
 
 export default function Miteco2ProjectPage(props) {
-  return <ProjectDetailPage {...props} activeFilter="landscape" image="/pages/proyectos/miteco_2.png" copy={copy} />
+  return <ProjectDetailPage {...props} activeFilter="landscape" image="/pages/proyectos/miteco_2.png" copy={miteco2Copy} />
 }

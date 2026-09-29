@@ -42,7 +42,7 @@ function translateFacts(facts) {
 
 export function getItalianProjectContent(copy) {
   const source = copy.en ?? copy.es
-  const translation = projectTranslations[source.title]
+  const translation = projectTranslations[source.title] ?? Object.entries(projectTranslations).find(([title]) => title.toLowerCase() === source.title.toLowerCase())?.[1]
 
   if (!translation) return { ...source, details: 'DATI DEL PROGETTO', facts: translateFacts(source.facts) }
 
