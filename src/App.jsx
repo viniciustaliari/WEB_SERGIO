@@ -187,6 +187,18 @@ export default function App() {
         contact: 'Contact',
         phoneRinging: 'PHONE RINGING',
       }
+    : language === 'it'
+      ? {
+          landscape: 'PAESAGGISMO',
+          academy: 'ACCADEMIA',
+          interiors: 'DESIGN DEGLI INTERNI',
+          scenography: 'SCENOGRAFIA',
+          graphic: 'DESIGN GRAFICO',
+          artDirection: 'DIREZIONE ARTISTICA',
+          landscapeDetail: 'Paesaggismo e giardinaggio',
+          contact: 'Contatti',
+          phoneRinging: 'TELEFONO IN SQUILLO',
+        }
     : {
         landscape: 'AJARDINAMIENTO',
         academy: 'ACADEMIA',

@@ -19,12 +19,12 @@ const secondaryItems = [
 const menuTranslations = {
   es: ['1. DISE\u00d1O DE INTERIORES', '2. PAISAJISMO', '3. ESCENOGRAF\u00cdA', '4. DISE\u00d1O GR\u00c1FICO', '5. DIRECCI\u00d3N DE ARTE', '6. ACADEMIA', 'CONTACTO', 'ESTUDIO', 'TIENDA ONLINE'],
   en: ['1. INTERIOR DESIGN', '2. LANDSCAPE DESIGN', '3. SCENOGRAPHY', '4. GRAPHIC DESIGN', '5. ART DIRECTION', '6. ACADEMY', 'CONTACT', 'STUDIO', 'ONLINE SHOP'],
+  it: ['1. DESIGN DEGLI INTERNI', '2. PAESAGGISMO', '3. SCENOGRAFIA', '4. DESIGN GRAFICO', '5. DIREZIONE ARTISTICA', '6. ACCADEMIA', 'CONTATTI', 'STUDIO', 'NEGOZIO ONLINE'],
 }
 
 export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled = false }) {
   const [isOpen, setIsOpen] = useState(false)
   const { language, setLanguage } = useLanguage()
-  const isSpanish = language === 'es'
   const labels = menuTranslations[language]
 
   const handleNavigate = (item) => {
@@ -149,8 +149,8 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
               >
                 <button
                   type="button"
-                  className={`scene-menu-switch-option${!isSpanish ? ' is-active' : ''}`}
-                  aria-pressed={!isSpanish}
+                  className={`scene-menu-switch-option${language === 'en' ? ' is-active' : ''}`}
+                  aria-pressed={language === 'en'}
                   onClick={() => setLanguage('en')}
                 >
                   EN
@@ -158,8 +158,17 @@ export default function SceneMenu({ onNavigate, onSetSoundEnabled, soundEnabled 
                 <span className="scene-menu-switch-separator">/</span>
                 <button
                   type="button"
-                  className={`scene-menu-switch-option${isSpanish ? ' is-active' : ''}`}
-                  aria-pressed={isSpanish}
+                  className={`scene-menu-switch-option${language === 'it' ? ' is-active' : ''}`}
+                  aria-pressed={language === 'it'}
+                  onClick={() => setLanguage('it')}
+                >
+                  IT
+                </button>
+                <span className="scene-menu-switch-separator">/</span>
+                <button
+                  type="button"
+                  className={`scene-menu-switch-option${language === 'es' ? ' is-active' : ''}`}
+                  aria-pressed={language === 'es'}
                   onClick={() => setLanguage('es')}
                 >
                   ES

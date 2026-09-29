@@ -38,8 +38,16 @@ const englishProjectTitles = {
   'el-circulo': 'The Circle construction toy', 'cartel-teatro': 'Theatre poster', 'el-rastro': 'El Rastro corporate identity', hargok: 'Harvok typeface', haz: 'HAZ lamp', podcast: 'Podcast corporate identity', eneo: 'Eneo corporate identity', 'fiestas-locales': 'Local festivities poster', packaging: 'Editorial design and packaging', ilustraciones: 'Illustration collection', cross: 'CROSS chair', ufv: 'UFV scenography', playground: 'Experimental housing and playground', capilla: 'Chapel design and lighting', pg: 'PG corporate identity', boat: 'Boat sculpture', telefonica: 'Office project in the Telef\u00f3nica building', miteco: 'MITECO landscaping project', 'miteco-2': 'MITECO landscaping project 2', 'el-bosque': 'El Bosque cultural centre', 'album-musical': 'Art direction for a music album', 'espacio-expositivo': 'Temporary exhibition space 2021', 'v-karting': 'V.Karting logo and livery design', soldrink: 'Winery branding and labels', efimero: 'Ephemeral sales stand', 'nave-16': 'Artists\' residency at Nave 16',
 }
 
+const italianProjectTitles = {
+  'el-circulo': 'Gioco di costruzioni The Circle', 'cartel-teatro': 'Manifesto teatrale', 'el-rastro': 'Identita visiva El Rastro', hargok: 'Carattere Harvok', haz: 'Lampada HAZ', podcast: 'Identita visiva Podcast', eneo: 'Identita visiva Eneo', 'fiestas-locales': 'Manifesto delle feste locali', packaging: 'Design editoriale e packaging', ilustraciones: 'Collezione di illustrazioni', cross: 'Sedia CROSS', ufv: 'Scenografia UFV', playground: 'Abitazione sperimentale e Playground', capilla: 'Progetto illuminotecnico per cappella', pg: 'Identita visiva PG', boat: 'Scultura Boat', telefonica: "Progetto di uffici nell'edificio Telefonica", miteco: 'Progetto paesaggistico MITECO', 'miteco-2': 'Progetto paesaggistico MITECO 2', 'el-bosque': 'Centro culturale El Bosque', 'album-musical': 'Direzione artistica per album musicale', 'espacio-expositivo': 'Spazio espositivo temporaneo 2021', 'v-karting': 'Design del logo e livrea V.Karting', soldrink: 'Branding ed etichette per cantina', efimero: 'Stand di vendita temporaneo', 'nave-16': 'Residenza artistica presso Nave 16',
+}
+
 function englishLocation(location) {
   return location.replace(/Espa\u00f1a|EspaÃ±a/g, 'Spain')
+}
+
+function italianLocation(location) {
+  return location.replace(/Espa\u00f1a|Espa\u00f1a/g, 'Spagna')
 }
 
 function ProjectCard({
@@ -92,7 +100,7 @@ export default function ProjectsPage({
 
   const filteredProjects = useMemo(() => {
     const query = initialSearch.trim().toLocaleLowerCase()
-    return projectItems.filter((project) => (activeFilter === 'all' || project.category === activeFilter) && (!query || `${project.title} ${project.location} ${englishProjectTitles[project.id] ?? ''}`.toLocaleLowerCase().includes(query)))
+    return projectItems.filter((project) => (activeFilter === 'all' || project.category === activeFilter) && (!query || `${project.title} ${project.location} ${englishProjectTitles[project.id] ?? ''} ${italianProjectTitles[project.id] ?? ''}`.toLocaleLowerCase().includes(query)))
   }, [activeFilter, initialSearch])
 
   return (
@@ -115,8 +123,8 @@ export default function ProjectsPage({
           <ProjectCard
             key={project.title}
             projectId={project.id}
-            title={language === 'en' ? (englishProjectTitles[project.id] ?? project.title) : project.title}
-            location={language === 'en' ? englishLocation(project.location) : project.location}
+            title={language === 'en' ? (englishProjectTitles[project.id] ?? project.title) : language === 'it' ? (italianProjectTitles[project.id] ?? project.title) : project.title}
+            location={language === 'en' ? englishLocation(project.location) : language === 'it' ? italianLocation(project.location) : project.location}
             category={project.category}
             iconSrc={project.iconSrc}
             imageSrc={project.imageSrc}

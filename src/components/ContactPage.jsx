@@ -11,7 +11,11 @@ const contactGroups = [
 
 export default function ContactPage({ activePage, onBack, onNavigate }) {
   const { language } = useLanguage()
-  const contactCopy = language === 'es' ? contactGroups : [
+  const contactCopy = language === 'es' ? contactGroups : language === 'it' ? [
+    ['28047 Madrid', 'T. (+34) 633 878 755', 'contacto@m047.es'],
+    ['CV - Portfolio:', 'info@m047.es'],
+    ['Pubblicazioni e stampa:', 'info@m047.es'],
+  ] : [
     ['28047 Madrid', 'T. (+34) 633 878 755', 'contacto@m047.es'],
     ['CV - Portfolios:', 'info@m047.es'],
     ['Publications and press:', 'info@m047.es'],

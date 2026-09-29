@@ -16,6 +16,13 @@ const navItems = {
     { id: 'shop', label: 'ONLINE SHOP' },
     { id: 'academy', label: 'ACADEMY' },
   ],
+  it: [
+    { id: 'projects', label: 'PROGETTI' },
+    { id: 'studio', label: 'STUDIO' },
+    { id: 'contact', label: 'CONTATTI' },
+    { id: 'shop', label: 'NEGOZIO ONLINE' },
+    { id: 'academy', label: 'ACCADEMIA' },
+  ],
 }
 
 export default function PageHeader({
@@ -24,7 +31,6 @@ export default function PageHeader({
   onNavigate,
 }) {
   const { language, setLanguage } = useLanguage()
-  const isSpanish = language === 'es'
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -64,13 +70,13 @@ export default function PageHeader({
         </nav>
 
         <div className="projects-page-header-tools">
-          {isSearchOpen ? <form className="projects-page-search" onSubmit={submitSearch}><input autoFocus value={searchQuery} onChange={handleSearchChange} placeholder={language === 'es' ? 'Buscar proyectos' : 'Search projects'} /><button type="submit">OK</button></form> : null}
-          <button type="button" className="projects-page-search-button" aria-label={language === 'es' ? 'Buscar proyectos' : 'Search projects'} onClick={() => setIsSearchOpen((open) => !open)}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button>
+          {isSearchOpen ? <form className="projects-page-search" onSubmit={submitSearch}><input autoFocus value={searchQuery} onChange={handleSearchChange} placeholder={language === 'es' ? 'Buscar proyectos' : language === 'it' ? 'Cerca progetti' : 'Search projects'} /><button type="submit">OK</button></form> : null}
+          <button type="button" className="projects-page-search-button" aria-label={language === 'es' ? 'Buscar proyectos' : language === 'it' ? 'Cerca progetti' : 'Search projects'} onClick={() => setIsSearchOpen((open) => !open)}><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button>
           <div className="projects-page-lang-switch" role="group" aria-label="Idioma">
           <button
             type="button"
-            className={`projects-page-lang${!isSpanish ? ' is-active' : ''}`}
-            aria-pressed={!isSpanish}
+            className={`projects-page-lang${language === 'en' ? ' is-active' : ''}`}
+            aria-pressed={language === 'en'}
             onClick={() => setLanguage('en')}
           >
             EN
@@ -78,8 +84,17 @@ export default function PageHeader({
           <span className="projects-page-lang-separator">/</span>
           <button
             type="button"
-            className={`projects-page-lang${isSpanish ? ' is-active' : ''}`}
-            aria-pressed={isSpanish}
+            className={`projects-page-lang${language === 'it' ? ' is-active' : ''}`}
+            aria-pressed={language === 'it'}
+            onClick={() => setLanguage('it')}
+          >
+            IT
+          </button>
+          <span className="projects-page-lang-separator">/</span>
+          <button
+            type="button"
+            className={`projects-page-lang${language === 'es' ? ' is-active' : ''}`}
+            aria-pressed={language === 'es'}
             onClick={() => setLanguage('es')}
           >
             ES

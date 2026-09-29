@@ -2,10 +2,11 @@ import { useLanguage } from '../context/LanguageContext'
 import PageFooter from './PageFooter'
 import PageHeader from './PageHeader'
 import ProjectsFilterBar from './ProjectsFilterBar'
+import { getItalianProjectContent } from '../content/italianProjectContent'
 
 export default function ProjectDetailPage({ onBack, onNavigate, activeFilter, image, copy }) {
   const { language } = useLanguage()
-  const content = copy[language]
+  const content = language === 'it' ? getItalianProjectContent(copy) : copy[language] ?? copy.en
 
   return (
     <section className="projects-page project-detail-page">
